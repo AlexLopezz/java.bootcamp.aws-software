@@ -1,4 +1,4 @@
-package sampleFactorial;
+package factorial_02;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

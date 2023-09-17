@@ -1,4 +1,4 @@
-package sampleCapicua;
+package capicua_01;
 
 import utils.SOLUTION_MODE;
 
@@ -6,7 +6,6 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-
     static int reverseRecursive(int number, int reverse){
         if(number == 0)
             return reverse;
