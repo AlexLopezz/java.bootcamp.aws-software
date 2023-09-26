@@ -1,8 +1,4 @@
-package queue_02;
-
-import utils.ICollectionable;
-
-import java.util.Queue;
+package excercise2;
 
 public interface IQueue<T> {
     void queue(T t);

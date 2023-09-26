@@ -1,8 +1,8 @@
-package multiplication_06;
+package excercise6;
 
 import java.util.Scanner;
 
-public class Main {
+public class Demo {
     //Metodo que calcula la multiplicacion de dos numeros, de manera recursiva.
     static int multiplication(int number, int number2){
         if(number2 < 0) {

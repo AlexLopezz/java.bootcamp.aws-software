@@ -1,6 +1,6 @@
-package reverse_string_07;
+package excercise7;
 
-public class Main {
+public class Demo {
     static String reverseStr(String string){
         if(string.isEmpty())
             return string;

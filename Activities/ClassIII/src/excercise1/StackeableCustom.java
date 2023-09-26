@@ -1,4 +1,4 @@
-package stack_01;
+package excercise1;
 import java.util.Stack;
 
 public class StackeableCustom<T> implements IStackeable<T> {

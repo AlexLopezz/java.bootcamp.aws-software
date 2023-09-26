@@ -1,4 +1,4 @@
-package stack_queue_without_collections_03.stack;
+package excercise3.stack;
 
 import java.util.Arrays;
 

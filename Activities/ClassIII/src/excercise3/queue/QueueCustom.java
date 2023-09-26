@@ -1,6 +1,4 @@
-package stack_queue_without_collections_03.queue;
-
-import java.util.Arrays;
+package excercise3.queue;
 
 public class QueueCustom<T> extends QueueAbstract<T> {
 

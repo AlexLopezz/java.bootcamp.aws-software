@@ -1,8 +1,6 @@
-package stack_queue_without_collections_03.stack;
+package excercise3.stack;
 
-import stack_01.IStackeable;
-
-import java.util.Arrays;
+import excercise1.IStackeable;
 
 public abstract class AbstractStack<T> implements IStackeable<T> {
     protected int size;

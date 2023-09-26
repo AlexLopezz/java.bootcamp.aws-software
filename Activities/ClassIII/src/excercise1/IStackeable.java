@@ -1,4 +1,4 @@
-package stack_01;
+package excercise1;
 
 public interface IStackeable<T>{
     boolean isEmpty();

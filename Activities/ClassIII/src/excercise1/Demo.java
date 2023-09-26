@@ -1,10 +1,7 @@
-package stack_01;
+package excercise1;
 
 
-import java.util.Arrays;
-import java.util.List;
-
-public class SampleStack {
+public class Demo {
     public static void main(String[] args) {
         IStackeable<String> myStack = new StackeableCustom<>();
         myStack.push("Hernan");

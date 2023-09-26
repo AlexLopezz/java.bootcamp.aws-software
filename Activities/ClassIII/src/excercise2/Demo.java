@@ -1,6 +1,6 @@
-package queue_02;
+package excercise2;
 
-public class SampleQueue {
+public class Demo {
     public static void main(String[] args) {
         IQueue<String> myQueue = new CustomQueue<>();
         myQueue.queue("Javier");

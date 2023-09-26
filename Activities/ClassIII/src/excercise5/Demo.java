@@ -1,8 +1,8 @@
-package factorial_05;
+package excercise5;
 
 import java.util.Scanner;
 
-public class Main {
+public class Demo {
     // Calculamos el factorial de un numero mediante Generics:
     static <I extends Integer> long factorialNumberT(I i){
         int number = i.intValue();

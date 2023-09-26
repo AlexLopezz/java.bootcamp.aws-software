@@ -1,4 +1,4 @@
-package stack_queue_without_collections_03.queue;
+package excercise3.queue;
 
 public class Node<T> {
     T element;

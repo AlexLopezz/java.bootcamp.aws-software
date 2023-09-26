@@ -1,6 +1,6 @@
-package stack_queue_without_collections_03.queue;
+package excercise3.queue;
 
-public class Main {
+public class Demo {
 
     public static void main(String[] args) {
         QueueAbstract<String> myQueue = new QueueCustom<>();

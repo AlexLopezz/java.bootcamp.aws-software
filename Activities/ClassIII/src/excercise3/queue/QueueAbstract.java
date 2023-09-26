@@ -1,6 +1,6 @@
-package stack_queue_without_collections_03.queue;
+package excercise3.queue;
 
-import queue_02.IQueue;
+import excercise2.IQueue;
 
 import java.util.Arrays;
 

@@ -1,8 +1,8 @@
-package stack_queue_without_collections_03.stack;
+package excercise3.stack;
 
-import stack_01.IStackeable;
+import excercise1.IStackeable;
 
-public class SampleStack {
+public class Demo {
     public static void main(String[] args) {
         IStackeable<String> myStack = new StackCustom<>();
 
