@@ -80,10 +80,11 @@
                     </div>
                 </form>
             </div>
-            <ul class="list-unstyled">
-               <a href="${pageContext.request.contextPath}/list">Back to List</a>
+            <div>
+               <a class="btn btn-success" href="${pageContext.request.contextPath}/list">Back to List of Users</a>
+            </div>
                <a href="${pageContext.request.contextPath}/">Home</a>
-            </ul>
+
 
         </div>
     </body>

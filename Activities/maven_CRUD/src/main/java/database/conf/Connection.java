@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Connection implements IConnectable{
     private String PATH;
-    private File file;
 
     public Connection() throws IOException {
         init();
@@ -17,10 +16,20 @@ public class Connection implements IConnectable{
 
     @Override
     public void init() throws IOException {
-        this.PATH =  "/home/alex/Documents/BootcampAWSoftware/Activities/maven_CRUD/src/main/java/database/myDB.txt";
-        file = new File(PATH);
+        initPath();
+        createFile();
     }
 
+    private void initPath(){
+        switch (System.getProperty("os.name")){
+            case "Windows 10" -> this.PATH = "C:\\Users\\Alex\\Documents\\BootcampAWSoftware\\Activities\\maven_CRUD\\src\\main\\java\\database\\myDB.txt";
+            case "Linux"   -> this.PATH =  "/home/alex/Documents/BootcampAWSoftware/Activities/maven_CRUD/src/main/java/database/myDB.txt";
+        }
+    }
+    private void createFile() throws IOException {
+        if(!new File(PATH).exists())
+            Files.createFile(Paths.get(PATH));
+    }
 
     /**
      *  Return our current data source.
@@ -29,19 +38,11 @@ public class Connection implements IConnectable{
      */
     @Override
     public List<String> getDataSource() throws IOException {
-        if(!containsContentDB())
-            addColumnsDB();
-
         List<String> datasource = new LinkedList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            int numberLine=0;
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH))) {
             String line;
-            while ((line = br.readLine()) != null) {
-                if(numberLine > 0)
-                    datasource.add(line);
-
-                numberLine++;
-            }
+            while ((line = br.readLine()) != null)
+                datasource.add(line);
         }
 
         return datasource;
@@ -54,34 +55,12 @@ public class Connection implements IConnectable{
      */
     @Override
     public void refresh(List<String> datasource) throws IOException {
-        try(FileWriter fl = new FileWriter(file, true);
+        try(FileWriter fl = new FileWriter(PATH, false);
             PrintWriter pw = new PrintWriter(fl)){
 
             for (String data : datasource)
                 pw.println(data);
-
         }
     }
 
-    /**
-     *  Adds the columns of our data source
-     * @throws IOException warning - this occurs when there are problems in the data reading.
-     */
-    private void addColumnsDB() throws IOException {
-        try(FileWriter fl = new FileWriter(file);
-            PrintWriter pw = new PrintWriter(fl)){
-
-            pw.println("DNI;NAME;LASTNAME;DATE_BIRTH;PROFESSION");
-        }
-    }
-
-    /**
-     * Deletes the file where our data source is located
-     * @throws IOException warning - this occurs when there are problems in the data reading.
-     */
-    private void deleteContentDB() throws IOException { Files.deleteIfExists(Paths.get(PATH)); }
-
-    private boolean containsContentDB() throws IOException {
-        return Files.exists(Paths.get(PATH)) && !Files.readAllLines(Paths.get(PATH)).isEmpty();
-    }
 }

@@ -18,16 +18,9 @@ import java.util.stream.Stream;
 public class UserRepositoryImpl implements IUserRepository {
 
     IConnectable conn;
-    List<User> myUserCache;
 
     public UserRepositoryImpl() throws IOException {
         conn = new Connection();
-        myUserCache = new LinkedList<>();
-        refreshCache();
-    }
-
-    private void refreshCache(){
-        myUserCache = getAll();
     }
 
     /**
@@ -36,18 +29,20 @@ public class UserRepositoryImpl implements IUserRepository {
      */
     @SneakyThrows
     public void save(User user) {
+        List<User> users= getAll();
+
         //Searching user in our current datasource:
-        if(myUserCache.contains(user)){
-            for(int i = 0; i < myUserCache.size(); i++){
-                if(myUserCache.get(i).getDni().equals(user.getDni())) {
-                    myUserCache.set(i, user);
+        if(users.contains(user)){
+            for(int i = 0; i < users.size(); i++){
+                if(users.get(i).getDni().equals(user.getDni())) {
+                    users.set(i, user);
                     break;
                 }
             }
         }else
-            myUserCache.add(user); //will add only if no user is found
+            users.add(user); //will add only if no user is found
 
-        conn.refresh(castToDataSource(myUserCache)); //Refresh our datasource, but not before cast to List<String> (DataSource)
+        conn.refresh(castToDataSource(users)); //Refresh our datasource, but not before cast to List<String> (DataSource)
     }
 
     @SneakyThrows
@@ -84,7 +79,7 @@ public class UserRepositoryImpl implements IUserRepository {
      */
     @Override
     public Optional<User> getUserBy(String dni) {
-        return myUserCache.stream()
+        return getAll().stream()
                 .filter(u -> u.getDni().equals(dni))
                 .findFirst();
     }
@@ -96,11 +91,12 @@ public class UserRepositoryImpl implements IUserRepository {
     @SneakyThrows
     @Override
     public void deleteBy(String dni) {
+        List<User> users = getAll();
+
         Optional<User> user = getUserBy(dni);
 
-        user.ifPresent(myUserCache::remove);
-        conn.refresh(castToDataSource(myUserCache));
-        refreshCache();
+        user.ifPresent(users::remove);
+        conn.refresh(castToDataSource(users));
     }
 
     //UTILS
