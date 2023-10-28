@@ -10,6 +10,28 @@
             <h1 class="d-inline bg-dark text-light" th:text="${title}"></h1>
             <div class="d-flex justify-content-center align-items-center m-2">
                 <form th:action="@{/user/form}" method="POST" th:object="${user}" class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
+                    <input
+                            hidden
+                            th:field="*{dni}"
+                    >
+                    <!-- will only show user dni when not present   -->
+                    <div th:if="${user.dni == null || errors.containsKey('dni')}" class="m-2">
+                        <div>
+                            <label>DNI</label>
+                        </div>
+                        <div>
+                            <input
+                                class="text-center"
+                                type="text"
+                                th:field="*{dni}"
+                                placeholder="11222333"
+                            >
+                        <!-- Error -->
+                        <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="color:red;"></div>
+                    </div>
+
+                    </div>
+
                     <div class="m-2">
                         <div>
                             <label>Name</label>
@@ -18,70 +40,48 @@
                             <input
                                     class="text-center"
                                     type="text"
-                                    name="name"
                                     th:field="*{name}"
                                     placeholder="Bill">
                         </div>
-                        <div th:if="${errors != null && errors.containsKey('name')}" th:text="${errors.name}" style="color:red;"></div>
+                        <!-- Error -->
+                        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red;"></div>
                     </div>
 
                     <div class="m-2">
                         <div>
                             <label>Last Name</label>
                         </div>
+                        <!-- Error -->
+                        <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></div>
                         <div>
                             <input
                                     class="text-center"
                                     type="text"
-                                    name="lastName"
                                     th:field="*{lastName}"
                                     placeholder="Gates"
                             >
+                            <!-- Error -->
+                            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></div>
                         </div>
-                        <div th:if="${errors != null && errors.containsKey('lastName')}" th:text="${errors.lastName}" style="color:red;"></div>
-                    </div>
-                    <div th:if="${user.dni == null}">
-                            <div class="m-2">
-                                <div>
-                                    <label>DNI</label>
-                                </div>
-                                <div>
-                                    <input
-                                            class="text-center"
-                                            type="text"
-                                            th:field="*{dni}"
-                                            placeholder="11222333"
-                                    >
-                                </div>
-                            </div>
-                        <div th:if="${errors != null && errors.containsKey('dni')}" th:text="${errors.dni}" style="color:red;"></div>
-                    </div>
-                    <div th:else>
-                        <input
-                                hidden
-                                name="dni"
-                                type="text"
-                                th:field="*{dni}"
-                        >
                     </div>
 
                     <div class="m-2">
                         <label>Date of Birth</label>
                         <input
-                                class="text-center"
-                                name="dateBirth"
-                                th:field="*{dateBirth}"
-                                type="date"
+                            class="text-center"
+                            type="date"
+                            th:field="*{dateBirth}"
                         >
-                        <div th:if="${errors != null && errors.containsKey('dateBirth')}" th:text="${errors.dateBirth}" style="color:red;"></div>
+                        <!-- Error -->
+                        <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" style="color:red;"></div>
                     </div>
 
                     <div class="m-2">
                         <label>Profession</label>
-                        <select th:field="*{profession}" class="text-center" name="profession">
-                            <option value="#" disabled selected>--- Select An Option ---</option>
-                                <option th:each="prof : ${professions}" th:value="${prof}" th:text="${prof}"></option>
-                        </select>
+                            <select th:field="*{profession}" class="text-center" name="profession">
+                                <option value="#" disabled selected>--- Select An Option ---</option>
+                                    <option th:each="prof : ${professions}" th:value="${prof}" th:text="${prof.value}"></option>
+                            </select>
                     </div>
 
                     <div class="m-2">

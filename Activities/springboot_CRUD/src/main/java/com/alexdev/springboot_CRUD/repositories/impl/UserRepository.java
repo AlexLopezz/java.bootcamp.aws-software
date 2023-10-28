@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -103,12 +104,15 @@ public class UserRepository implements IUserRepository {
      */
     private User castToUser(String dataRow) throws ParseException {
         String[] fields = dataRow.split(";");
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
 
         return User.builder()
                     .dni(fields[0])
                     .name(fields[1])
                     .lastName(fields[2])
-                    .dateBirth(LocalDate.parse(fields[3]))
+                    .dateBirth(sdf.parse(fields[3]))
                     .profession(PROFESSION.valueOf(fields[4]))
                 .build();
     }

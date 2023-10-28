@@ -8,6 +8,9 @@
 <body>
 <div class="container text-center">
     <h1 th:text="${title}"></h1>
+
+    <h3 th:if="${users.isEmpty()}">No registered users :(</h3>
+
     <table th:if="${users.size > 0}" class="table table-hover">
         <thead>
         <tr class="col-header">
@@ -25,14 +28,13 @@
             <td th:text="${user.dni}"></td>
             <td th:text="${user.name}"></td>
             <td th:text="${user.lastName}"></td>
-            <td th:text="${user.dateBirth}"></td>
-            <td th:text="${user.profession}"></td>
+            <td th:text="${#dates.format(user.dateBirth, 'yyyy/MM/dd')}"></td>
+            <td th:text="${user.profession.value}"></td>
             <td><a class="btn btn-warning" th:href="@{/user/form(dni=${user.dni})}">Edit</a></td>
             <td><a class="btn btn-danger" th:href="@{/user/delete(dni=${user.dni})}">Delete</a></td>
         </tr>
         </tbody>
     </table>
-    <h3 th:else>No registered users :(</h3>
     <div class="m-2">
         <a class="btn btn-primary" th:href="@{/user/form}">Add new Person</a>
     </div>

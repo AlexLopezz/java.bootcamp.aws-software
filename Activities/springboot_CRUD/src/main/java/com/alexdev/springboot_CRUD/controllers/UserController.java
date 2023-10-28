@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/form")
-    public String formUser(@ModelAttribute User user, Model model){
+    public String formUser(User user, Model model){
         model.addAttribute("title", "Create user");
 
         Optional.ofNullable(user.getDni())
@@ -47,13 +47,18 @@ public class UserController {
     @PostMapping("/form")
     public String postFormUser(@Valid User user, BindingResult validations, Model model){
         if(validations.hasErrors()){
-           Map<String, String> errors = Validations.getErrors(validations.getFieldErrors());
-           model.addAttribute("errors", errors);
+            model.addAttribute("title", "Error! Check values");
+            model.addAttribute("professions", PROFESSION.values());
 
-           return "form";
+            Map<String, String> errors = Validations.getErrors(validations.getFieldErrors());
+            model.addAttribute("errors", errors);
+            model.addAttribute("containsErrors", (errors.isEmpty()));
+
+            return "form";
         }
+        user.setDni(user.getDni().replace(",",""));
 
-        Optional.ofNullable(user)
+        Optional.of(user)
                 .ifPresent(u -> userService.save(u));
 
 
@@ -61,8 +66,8 @@ public class UserController {
     }
 
     @GetMapping("/delete")
-    public String deleteUser(@RequestParam String id, Model model){
-        Optional.ofNullable(id)
+    public String deleteUser(@RequestParam String dni, Model model){
+        Optional.ofNullable(dni)
                 .ifPresent(d -> userService.deleteBy(d));
 
         return "redirect:/user";
