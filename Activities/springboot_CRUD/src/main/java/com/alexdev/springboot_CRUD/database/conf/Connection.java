@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 @Component
 public class Connection implements IConnectable{
-    private String PATH;
+    private String PATH = System.getProperty("user.dir");
 
     public Connection() throws IOException {
         init();
@@ -23,8 +23,8 @@ public class Connection implements IConnectable{
 
     private void initPath(){
         switch (System.getProperty("os.name")){
-            case "Windows 10" -> this.PATH = "C:\\Users\\Alex\\Documents\\BootcampAWSoftware\\Activities\\maven_CRUD\\src\\main\\java\\resources\\myDB.txt";
-            case "Linux"   -> this.PATH =  "/home/alex/Documents/BootcampAWSoftware/Activities/springboot_CRUD/src/main/java/com/alexdev/springboot_CRUD/database/myDB.txt";
+            case "Windows 10" -> this.PATH= this.PATH.concat("\\src\\main\\java\\com\\alexdev\\springboot_CRUD\\database\\myDB.txt");
+            case "Linux"   -> this.PATH= this.PATH.concat("/src/main/java/com/alexdev/springboot_CRUD/database/myDB.txt");
         }
     }
     private void createFile() throws IOException {
