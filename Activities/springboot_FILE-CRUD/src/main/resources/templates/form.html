@@ -15,7 +15,7 @@
                             th:field="*{dni}"
                     >
                     <!-- will only show user dni when not present   -->
-                    <div th:if="${user.dni == null || errors.containsKey('dni')}" class="m-2">
+                    <div th:if="${user.dni == null}" class="m-2">
                         <div>
                             <label>DNI</label>
                         </div>
@@ -26,10 +26,9 @@
                                 th:field="*{dni}"
                                 placeholder="11222333"
                             >
-                        <!-- Error -->
-                        <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="color:red;"></div>
-                    </div>
-
+                            <!-- Error -->
+                            <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="color:red;"></div>
+                        </div>
                     </div>
 
                     <div class="m-2">
@@ -51,8 +50,6 @@
                         <div>
                             <label>Last Name</label>
                         </div>
-                        <!-- Error -->
-                        <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></div>
                         <div>
                             <input
                                     class="text-center"

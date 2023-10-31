@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.alexdev</groupId>
-	<artifactId>springboot_CRUD</artifactId>
+	<artifactId>springboot_FILE-CRUD</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springboot_CRUD</name>
 	<description>Demo project for Spring Boot</description>
