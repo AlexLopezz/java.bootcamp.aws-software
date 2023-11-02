@@ -11,59 +11,59 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class UserRepository implements IUserRepository{
-    IConnectable conn;
+    private final IConnectable conn;
+    private final List<User> userCache;
 
     public UserRepository() throws IOException {
         conn = new Connection();
+        userCache = new LinkedList<>();
     }
 
     @Override
     public List<User> getAll() throws IOException {
-        List<User> users = new LinkedList<>();
+        userCache.clear(); //Empty Cache, because we must add again...
 
+        //Adding users that find into file DB:
         if (!conn.getDataSource().isEmpty()) {
             for (String data : conn.getDataSource()) {
-                users.add(castToUser(data));
+                userCache.add(castToUser(data));
             }
         }
 
-        return users;
+        return userCache;
     }
 
     @Override
     public void save(User user) throws IOException {
-        List<User> users = getAll();
-
-        if(users.contains(user)){
-            for(int i = 0; i < users.size(); i++){
-                if(users.get(i).getDni().equals(user.getDni())) {
-                    users.set(i, user);
+        //Check if exist user:
+        if(userCache.contains(user)){
+            for(int i = 0; i < userCache.size(); i++){
+                if(userCache.get(i).getDni().equals(user.getDni())) {
+                    userCache.set(i, user); //Replace user by array index
                     break;
                 }
             }
         }else
-            users.add(user);
+            userCache.add(user); //Only add, if not exist user...
 
-        conn.refresh(castToDataSource(users));
+        conn.refresh(castToDataSource(userCache));
     }
 
     @Override
     public void deleteBy(String DNI) throws IOException {
-        List<User> users = getAll();
-
+        //Check if exist user:
         Optional<User> user = getBy(DNI);
+        user.ifPresent(userCache::remove); //Only delete if exist user...
 
-        user.ifPresent(users::remove);
-        conn.refresh(castToDataSource(users));
+        conn.refresh(castToDataSource(userCache)); //Refresh file db
     }
 
     @Override
-    public Optional<User> getBy(String DNI) throws IOException {
-        return getAll().stream()
-                .filter(u -> u.getDni().equals(DNI))
-                .findFirst();
+    public Optional<User> getBy(String DNI){
+        return userCache.stream()
+                .filter(u -> u.getDni().equals(DNI)) //Filter by DNI
+                .findFirst(); //Warning... if not present, return optional empty
     }
-
 
     //UTILS
     private User castToUser(String dataRow){
