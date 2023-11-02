@@ -1,12 +1,11 @@
 package database.conf;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Connection implements IConnectable{
@@ -19,11 +18,22 @@ public class Connection implements IConnectable{
 
     @Override
     public void init() throws IOException {
-        this.PATH =  "/home/alex/Documents/BootcampAWSoftware/Activities/jsp_CRUD/src/database/myDB.txt";
-        file = new File(PATH);
-        addColumnsDB();
+        initPath();
+        createFile();
     }
 
+    private void initPath(){
+        if (System.getProperty("os.name").equals("Linux")) {
+            this.PATH = "/home/alex/Documents/BootcampAWSoftware/Activities/jsp_CRUD/src/database/myDB.txt";
+        } else {
+            this.PATH = "C:\\Users\\Alex\\Documents\\BootcampAWSoftware\\Activities\\jsp_CRUD\\src\\database\\myDB.txt";
+        }
+    }
+
+    private void createFile() throws IOException {
+        if(!new File(PATH).exists())
+            Files.createFile(Paths.get(PATH));
+    }
 
     /**
      *  Return our current data source.
@@ -32,14 +42,14 @@ public class Connection implements IConnectable{
      */
     @Override
     public List<String> getDataSource() throws IOException {
-        Path dataPath = Paths.get(PATH);
+        List<String> datasource = new LinkedList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH))) {
+            String line;
+            while ((line = br.readLine()) != null)
+                datasource.add(line);
+        }
 
-        List<String> datasource = Arrays.stream(String.valueOf(Files.readAllLines(dataPath))
-                .replace("[", "")
-                .replace("]", "")
-                .split(",")).toList();
-
-        return datasource.stream().skip(1).toList();
+        return datasource;
     }
 
     /**
@@ -49,28 +59,11 @@ public class Connection implements IConnectable{
      */
     @Override
     public void refresh(List<String> datasource) throws IOException {
-        addColumnsDB();
-        try(FileWriter fl = new FileWriter(PATH, true)){
-            for(String d : datasource){
-                fl.write(d);
-            }
+        try(FileWriter fl = new FileWriter(PATH, false);
+            PrintWriter pw = new PrintWriter(fl)){
+
+            for (String data : datasource)
+                pw.println(data);
         }
     }
-
-    /**
-     *  Adds the columns of our data source
-     * @throws IOException warning - this occurs when there are problems in the data reading.
-     */
-    private void addColumnsDB() throws IOException {
-        deleteContent();
-        try(FileWriter fl = new FileWriter(file)){
-            fl.write("DNI;NAME;LASTNAME;DATE_BIRTH;PROFESSION"+System.lineSeparator());
-        }
-    }
-
-    /**
-     * Deletes the file where our data source is located
-     * @throws IOException warning - this occurs when there are problems in the data reading.
-     */
-    private void deleteContent() throws IOException { Files.deleteIfExists(Paths.get(PATH)); }
 }

@@ -6,17 +6,18 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import repositories.UserRepository;
+import services.IUserService;
+import services.UserService;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @WebServlet("/deleteUser")
 public class DeleteUserServlet extends HttpServlet {
-
-    UserRepository userRepository;
+    private final IUserService userService;
 
     public DeleteUserServlet() throws IOException {
-         userRepository = new UserRepository();
+        this.userService = new UserService();
     }
 
     @Override
@@ -26,9 +27,9 @@ public class DeleteUserServlet extends HttpServlet {
         dni.ifPresent(d -> { //if the value is found
             try {
 
-                userRepository.searchByDNI(d).ifPresent(u -> { //if the value found is from anything user... then
+                userService.getBy(d).ifPresent(u -> { //if the value found is from anything user... then
                     try {
-                        userRepository.delete(u.getDni()); //delete by means your dni
+                        userService.deleteBy(u.getDni()); //delete by means your dni
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -38,7 +39,6 @@ public class DeleteUserServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         });
-
 
         resp.sendRedirect(req.getContextPath().concat("/list")); //redirect to /list(controller)...
     }

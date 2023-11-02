@@ -86,6 +86,6 @@ public class User {
                 .concat(name).concat(";")
                 .concat(lastName).concat(";")
                 .concat(dateBirth.toString()).concat(";")
-                .concat(profession.name()).concat("\n");
+                .concat(profession.name());
     }
 }

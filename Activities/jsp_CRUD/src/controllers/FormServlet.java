@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import models.User;
 import models.enums.PROFESSION;
 import repositories.UserRepository;
+import services.IUserService;
+import services.UserService;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,10 +18,10 @@ import java.util.Optional;
 @WebServlet("/form")
 public class FormServlet extends HttpServlet {
 
-    UserRepository userRepository;
+    private final IUserService userService;
 
     public FormServlet() throws IOException {
-        userRepository = new UserRepository();
+        this.userService = new UserService();
     }
 
     @Override
@@ -27,7 +29,7 @@ public class FormServlet extends HttpServlet {
         Optional<String> dniUser = Optional.ofNullable(req.getParameter("dni"));
         dniUser.ifPresent(u -> {
             try {
-                Optional<User> userDB = userRepository.searchByDNI(u);
+                Optional<User> userDB = userService.getBy(u);
                 userDB.ifPresent(user -> req.setAttribute("user", user));
 
             } catch (IOException e) {
@@ -47,10 +49,10 @@ public class FormServlet extends HttpServlet {
         LocalDate dateBirth = LocalDate.parse(req.getParameter("dateBirth"));
         PROFESSION profession = PROFESSION.valueOf(req.getParameter("profession"));
 
-        userRepository.save(new User(dni, name, lastName, dateBirth, profession));
+        userService.save(new User(dni, name, lastName, dateBirth, profession));
 
 
-        //Redireccionamos hacia la lista de usuarios:
+
         resp.sendRedirect(req.getContextPath().concat("/list"));
     }
 }
