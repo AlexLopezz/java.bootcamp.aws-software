@@ -43,5 +43,6 @@
     <div style="margin: 10px;">
         <a class="button btn-new" href="${pageContext.request.contextPath}/form">Add new Person</a>
     </div>
+        <a href="${pageContext.request.contextPath}/">Home</a>
 </body>
 </html>
