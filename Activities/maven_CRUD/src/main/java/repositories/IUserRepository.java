@@ -1,5 +1,6 @@
 package repositories;
 
+import exceptions.DAOException;
 import models.User;
 
 import java.util.List;
@@ -9,5 +10,5 @@ public interface IUserRepository {
     void save(User u);
     void deleteBy(String DNI);
     Optional<User> getBy(String DNI);
-    List<User> getAll();
+    List<User> getAll() throws DAOException;
 }
