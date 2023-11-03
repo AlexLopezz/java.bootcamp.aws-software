@@ -10,27 +10,25 @@ import lombok.SneakyThrows;
 import models.User;
 import models.enums.PROFESSION;
 import services.IUserService;
-import services.impl.UserServiceImpl;
+import services.impl.UserService;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 @WebServlet("/form")
 public class FormServlet extends HttpServlet {
-    IUserService userService;
+    private final IUserService userService;
 
     public FormServlet() throws IOException {
-        userService = new UserServiceImpl();
+        userService = new UserService();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<String> dniUser = Optional.ofNullable(req.getParameter("dni"));
         dniUser.ifPresent(u -> {
-            Optional<User> userDB = userService.searchByDNI(u);
+            Optional<User> userDB = userService.getBy(u);
             userDB.ifPresent(user -> req.setAttribute("user", user));
         });
         req.setAttribute("professions", PROFESSION.values());
@@ -40,7 +38,7 @@ public class FormServlet extends HttpServlet {
 
     @SneakyThrows
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
         String name = req.getParameter("name");
         String lastName = req.getParameter("lastName");
@@ -57,7 +55,6 @@ public class FormServlet extends HttpServlet {
                         .build()
         );
 
-        //Redireccionamos hacia la lista de usuarios:
         resp.sendRedirect(req.getContextPath().concat("/list"));
     }
 }

@@ -9,24 +9,19 @@ import repositories.IUserRepository;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-public class UserRepositoryImpl implements IUserRepository {
+public class UserRepository implements IUserRepository {
 
-    IConnectable conn;
+    private final IConnectable conn;
 
-    public UserRepositoryImpl() throws IOException {
+    public UserRepository() throws IOException {
         conn = new Connection();
     }
 
-    /**
-     *  this metod does not return anything, only save/modify the current user in the database.
-     * @param user to save/modify
-     */
+
     @SneakyThrows
     public void save(User user) {
         List<User> users= getAll();
@@ -40,20 +35,11 @@ public class UserRepositoryImpl implements IUserRepository {
                 }
             }
         }else
-            users.add(user); //will add only if no user is found
+            users.add(user);
 
-        conn.refresh(castToDataSource(users)); //Refresh our datasource, but not before cast to List<String> (DataSource)
+        conn.refresh(castToDataSource(users));
     }
 
-    @SneakyThrows
-    @Override
-    public void delete(User user) {
-        this.deleteBy(user.getDni());
-    }
-    /**
-     *  this method will return all the users that are in our database.
-     * @return List<User> All Users</User>
-     */
     @SneakyThrows
     @Override
     public List<User> getAll() {
@@ -68,43 +54,24 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     @Override
-    public void saveAll(List<User> tts) {
-        tts.forEach(this::save);
-    }
-
-    /**
-     *  this method returns a user by means of the user's DNI
-     * @param dni user
-     * @return Optional<User> warning - you must find out whether it contains the user... </User>
-     */
-    @Override
-    public Optional<User> getUserBy(String dni) {
+    public Optional<User> getBy(String dni) {
         return getAll().stream()
                 .filter(u -> u.getDni().equals(dni))
                 .findFirst();
     }
 
-    /**
-     *  this method will delete a user, by means of his ID (DNI)
-     * @param dni existing user's dni
-     */
     @SneakyThrows
     @Override
     public void deleteBy(String dni) {
         List<User> users = getAll();
 
-        Optional<User> user = getUserBy(dni);
+        Optional<User> user = getBy(dni);
 
         user.ifPresent(users::remove);
         conn.refresh(castToDataSource(users));
     }
 
     //UTILS
-    /**
-     *  Converts a row from our data source to user
-     * @param dataRow from data source
-     * @return User object
-     */
     private User castToUser(String dataRow) throws ParseException {
         String[] fields = dataRow.split(";");
 
@@ -117,11 +84,7 @@ public class UserRepositoryImpl implements IUserRepository {
                 .build();
     }
 
-    /**
-     *  Converts a list of users to a list of strings (original data source)
-     * @param users List<User></User>
-     * @return original data source
-     */
+
     private List<String> castToDataSource(List<User> users){
         return users.stream()
                 .map(convertToString)

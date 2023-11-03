@@ -1,7 +1,7 @@
 package controllers;
 
 import services.IUserService;
-import services.impl.UserServiceImpl;
+import services.impl.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,11 +15,10 @@ import java.util.Optional;
 
 @WebServlet("/list")
 public class ListUserServlet extends HttpServlet {
-
-    IUserService userService;
+    private final IUserService userService;
 
     public ListUserServlet() throws IOException {
-        userService = new UserServiceImpl();
+        userService = new UserService();
     }
 
     @Override
@@ -27,8 +26,8 @@ public class ListUserServlet extends HttpServlet {
         Optional.ofNullable(userService.getAll())
                 .ifPresent(users -> req.setAttribute("users", users));
 
-        req.setAttribute("title", "List of Users!"); //Title of head html.
+        req.setAttribute("title", "List of Users!");
 
-        getServletContext().getRequestDispatcher("/listUser.jsp").forward(req, resp); //dispatch to view
+        getServletContext().getRequestDispatcher("/listUser.jsp").forward(req, resp);
     }
 }

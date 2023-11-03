@@ -2,9 +2,12 @@ package repositories;
 
 import models.User;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface IUserRepository extends IRepository<User> {
-    Optional<User> getUserBy(String dni);
-    void deleteBy(String dni);
+public interface IUserRepository {
+    void save(User u);
+    void deleteBy(String DNI);
+    Optional<User> getBy(String DNI);
+    List<User> getAll();
 }
