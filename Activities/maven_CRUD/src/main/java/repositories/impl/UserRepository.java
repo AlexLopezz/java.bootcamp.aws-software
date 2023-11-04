@@ -3,6 +3,7 @@ package repositories.impl;
 import database.conf.Connection;
 import database.conf.IConnectable;
 import exceptions.DAOException;
+import exceptions.NotFoundException;
 import models.User;
 import models.enums.PROFESSION;
 import repositories.IUserRepository;
@@ -44,8 +45,8 @@ public class UserRepository implements IUserRepository{
         try {
             //Check if exist user:
             if (userCache.contains(user)) {
-                int indexUserReplace = userIndexList(user);
-                userCache.set(indexUserReplace, user); //Replace user by array index
+                int indexUserToReplace = userIndexList(user);
+                userCache.set(indexUserToReplace, user); //Replace user by array index
 
             } else
                 userCache.add(user); //Only add, if not exist user...
@@ -56,27 +57,26 @@ public class UserRepository implements IUserRepository{
         }
     }
 
-    private int userIndexList(User user){
-        return IntStream.range(0, userCache.size())
-                .filter(i -> Objects.equals(userCache.get(i), user))
-                .findFirst()
-                .orElseThrow(RuntimeException::new);
+
+    @Override
+    public void deleteBy(String DNI) throws DAOException {
+        try {
+            //Check if exist user:
+            User user = getBy(DNI);
+            userCache.remove(user);
+
+            conn.refresh(castToDataSource(userCache)); //Refresh file db
+        }catch (IOException | NotFoundException e){
+            throw new DAOException(e.getMessage());
+        }
     }
 
     @Override
-    public void deleteBy(String DNI) {
-        //Check if exist user:
-        Optional<User> user = getBy(DNI);
-        user.ifPresent(userCache::remove); //Only delete if exist user...
-
-        conn.refresh(castToDataSource(userCache)); //Refresh file db
-    }
-
-    @Override
-    public Optional<User> getBy(String DNI){
+    public User getBy(String DNI){
         return userCache.stream()
-                .filter(u -> u.getDni().equals(DNI)) //Filter by DNI
-                .findFirst(); //Warning... if not present, return optional empty
+                    .filter(u -> u.getDni().equals(DNI)) //Filter by DNI
+                    .findFirst()
+                .orElseThrow(() -> new NotFoundException("Not found user with dni: ".concat(DNI))); //Warning... if not present, return optional empty
     }
 
     //UTILS
@@ -96,4 +96,11 @@ public class UserRepository implements IUserRepository{
                 .toList();
     }
     private static final Function<User, String> convertToString = User::toString;
+    private int userIndexList(User user){
+        return IntStream.range(0, userCache.size())
+                .filter(i -> Objects.equals(userCache.get(i), user))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
+    }
+
 }

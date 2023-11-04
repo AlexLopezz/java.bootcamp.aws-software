@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface IUserRepository {
     void save(User u);
-    void deleteBy(String DNI);
-    Optional<User> getBy(String DNI);
+    void deleteBy(String DNI) throws DAOException;
+    User getBy(String DNI);
     List<User> getAll() throws DAOException;
 }

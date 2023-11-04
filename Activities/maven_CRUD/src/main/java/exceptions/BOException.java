@@ -5,7 +5,7 @@ public class BOException extends RuntimeException {
     public BOException() { }
 
     public BOException(String message) {
-        super(message);
+        this.message = message;
     }
 
     @Override

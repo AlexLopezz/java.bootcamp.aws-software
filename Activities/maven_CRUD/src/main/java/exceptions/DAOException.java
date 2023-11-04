@@ -8,7 +8,7 @@ public class DAOException extends IOException {
     public DAOException() { }
 
     public DAOException(String message) {
-        super(message);
+        this.message = message;
     }
 
     @Override
