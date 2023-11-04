@@ -41,42 +41,31 @@ public class UserRepository implements IUserRepository{
     }
 
     @Override
-    public void save(User user) {
-        try {
-            //Check if exist user:
-            if (userCache.contains(user)) {
-                int indexUserToReplace = userIndexList(user);
-                userCache.set(indexUserToReplace, user); //Replace user by array index
+    public void save(User user) throws IOException {
+        //Check if exist user:
+        if (userCache.contains(user)) {
+            int indexUserToReplace = userIndexList(user);
+            userCache.set(indexUserToReplace, user); //Replace user by array index
 
-            } else
-                userCache.add(user); //Only add, if not exist user...
+        } else
+            userCache.add(user); //Only add, if not exist user...
 
-            conn.refresh(castToDataSource(userCache));
-        }catch (IOException e){
-            throw new RuntimeException(e.getMessage());
-        }
+        conn.refresh(castToDataSource(userCache));
     }
 
 
     @Override
-    public void deleteBy(String DNI) throws DAOException {
-        try {
+    public void deleteBy(String DNI) throws IOException {
             //Check if exist user:
-            User user = getBy(DNI);
-            userCache.remove(user);
-
+            getBy(DNI).ifPresent(userCache::remove);
             conn.refresh(castToDataSource(userCache)); //Refresh file db
-        }catch (IOException | NotFoundException e){
-            throw new DAOException(e.getMessage());
-        }
     }
 
     @Override
-    public User getBy(String DNI){
+    public Optional<User> getBy(String DNI){
         return userCache.stream()
                     .filter(u -> u.getDni().equals(DNI)) //Filter by DNI
-                    .findFirst()
-                .orElseThrow(() -> new NotFoundException("Not found user with dni: ".concat(DNI))); //Warning... if not present, return optional empty
+                    .findFirst();
     }
 
     //UTILS

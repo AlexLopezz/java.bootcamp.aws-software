@@ -22,7 +22,13 @@ public class DeleteUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<String> dni = Optional.ofNullable(req.getParameter("dni"));
-        dni.ifPresent(userService::deleteBy);
+        dni.ifPresent(d -> {
+            try {
+                userService.deleteBy(d);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
 
         resp.sendRedirect(req.getContextPath().concat("/list"));

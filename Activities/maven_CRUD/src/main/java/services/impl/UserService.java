@@ -1,5 +1,7 @@
 package services.impl;
 
+import exceptions.DAOException;
+import exceptions.NotFoundException;
 import models.User;
 import repositories.IUserRepository;
 import repositories.impl.UserRepository;
@@ -17,16 +19,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll() throws DAOException {
         return userRepository.getAll();
     }
 
     @Override
-    public void save(User user) {
+    public void save(User user) throws IOException {
         userRepository.save(user);
     }
+
     @Override
-    public void deleteBy(String dni) {
+    public void deleteBy(String dni) throws IOException {
         userRepository.deleteBy(dni);
     }
 
