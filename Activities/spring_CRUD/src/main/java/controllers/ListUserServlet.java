@@ -1,10 +1,12 @@
 package controllers;
 
 import config.AppConfig;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import services.IUserService;
 import services.impl.UserServiceImpl;
@@ -18,16 +20,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@Controller
+@Configurable
 @WebServlet("/list")
 public class ListUserServlet extends HttpServlet {
 
-    IUserService userService;
+    private IUserService userService;
 
-    public ListUserServlet() throws IOException {
-        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-        this.userService = ac.getBean(IUserService.class);
+    @Override
+    public void init() throws ServletException {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+        context.refresh();
+
+        this.userService = context.getBean(IUserService.class);
+
+        context.close();
     }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

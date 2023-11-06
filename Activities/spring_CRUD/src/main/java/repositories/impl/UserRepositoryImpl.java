@@ -9,8 +9,10 @@ import models.enums.PROFESSION;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import repositories.IUserRepository;
+import services.IUserService;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -18,13 +20,19 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 
+@Repository
 public class UserRepositoryImpl implements IUserRepository {
 
-    IConnectable conn;
+    private final IConnectable conn;
 
     public UserRepositoryImpl() throws IOException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+        context.refresh();
+
         this.conn = context.getBean(IConnectable.class);
+
+        context.close();
     }
 
     /**

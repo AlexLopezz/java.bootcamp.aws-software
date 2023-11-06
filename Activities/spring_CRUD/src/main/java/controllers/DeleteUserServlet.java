@@ -7,23 +7,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import config.AppConfig;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import services.IUserService;
+import services.impl.UserServiceImpl;
 
 import java.io.IOException;
 import java.util.Optional;
 
-@Controller
+@Configurable
 @WebServlet("/deleteUser")
 public class DeleteUserServlet extends HttpServlet {
-    IUserService userService;
+    private IUserService userService;
 
-    public DeleteUserServlet() throws IOException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    @Override
+    public void init() throws ServletException {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+        context.refresh();
+
         this.userService = context.getBean(IUserService.class);
+
+        context.close();
     }
 
     @Override

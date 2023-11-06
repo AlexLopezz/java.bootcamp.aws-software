@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>User managment</title>
+    </head>
+    <body>
+        <div class="container text-center">
+            <h1 class="d-inline bg-dark text-light" th:text="${title}"></h1>
+            <div class="d-flex justify-content-center align-items-center m-2">
+                <form th:action="@{/user/form}" method="POST" th:object="${user}" class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
+                    <div th:if="${user.dni == null || !errors.isEmpty()}" class="m-2">
+                        <div>
+                            <label>DNI</label>
+                        </div>
+                        <div>
+                            <input class="text-center" type="text" th:field="*{dni}" placeholder="sample: 43542654"/>
+                            <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="color:red;"></div>
+                        </div>
+                    </div>
+                    <div th:if="${user.dni != null}">
+                        <input hidden th:field="*{dni}">
+                    </div>
+
+                    <div class="m-2">
+                        <div>
+                            <label>Name</label>
+                        </div>
+                        <div>
+                            <input class="text-center" type="text" th:field="*{name}" placeholder="Bill" />
+                        </div>
+                        <!-- Error -->
+                        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red;"></div>
+                    </div>
+
+                    <div class="m-2">
+                        <div>
+                            <label>Last Name</label>
+                        </div>
+                        <div>
+                            <input class="text-center" type="text" th:field="*{lastName}" placeholder="Gates" />
+                            <!-- Error -->
+                            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></div>
+                        </div>
+                    </div>
+
+                    <div class="m-2">
+                        <label>Date of Birth</label>
+                        <input class="text-center" type="date" th:field="*{dateBirth}" />
+                        <!-- Error -->
+                        <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" style="color:red;"></div>
+                    </div>
+
+                    <div class="m-2">
+                        <label>Profession</label>
+                            <select th:field="*{profession}" class="text-center">
+                                <option th:each="prof : ${professions}" th:value="${prof.id}" th:text="${prof.name}"></option>
+                            </select>
+                    </div>
+
+                    <div class="m-2">
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            <p><a class="btn btn-success" th:href="@{/user}">Back to List of Users</a></p>
+            <p><a th:href="@{/}">Home</a></p>
+        </div>
+    </body>
+</html>

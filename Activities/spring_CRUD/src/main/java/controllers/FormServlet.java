@@ -10,23 +10,33 @@ import config.AppConfig;
 import lombok.SneakyThrows;
 import models.User;
 import models.enums.PROFESSION;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import services.IUserService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
-@Controller
+@Configurable
 @WebServlet("/form")
 public class FormServlet extends HttpServlet {
-    IUserService userService;
+    private IUserService userService;
 
-    public FormServlet() throws IOException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+    @Override
+    public void init() throws ServletException {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+        context.refresh();
+
         this.userService = context.getBean(IUserService.class);
+
+        context.close();
     }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

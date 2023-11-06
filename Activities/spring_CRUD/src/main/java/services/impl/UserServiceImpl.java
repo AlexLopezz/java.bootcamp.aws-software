@@ -4,6 +4,8 @@ import config.AppConfig;
 import models.User;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import repositories.IUserRepository;
 import services.IUserService;
 
@@ -11,13 +13,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-
+@Service
 public class UserServiceImpl implements IUserService {
-    IUserRepository userRepository;
+    private final IUserRepository userRepository;
 
-    public UserServiceImpl() throws IOException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    public UserServiceImpl() {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+        context.refresh();
+
         this.userRepository = context.getBean(IUserRepository.class);
+
+        context.close();
     }
 
     @Override
