@@ -57,7 +57,6 @@ public class UserController {
             return "form";
         }
         user.setDni(user.getDni().replace(",",""));
-
         Optional.of(user)
                 .ifPresent(u -> userService.save(u));
 

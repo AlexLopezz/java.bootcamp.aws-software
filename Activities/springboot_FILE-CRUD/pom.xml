@@ -11,7 +11,7 @@
 	<groupId>com.alexdev</groupId>
 	<artifactId>springboot_FILE-CRUD</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot_CRUD</name>
+	<name>springboot_FILE-CRUD</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>

@@ -10,12 +10,11 @@
             <h1 class="d-inline bg-dark text-light" th:text="${title}"></h1>
             <div class="d-flex justify-content-center align-items-center m-2">
                 <form th:action="@{/user/form}" method="POST" th:object="${user}" class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
-                    <input
-                            hidden
-                            th:field="*{dni}"
-                    >
+                    <div th:if="${user.dni != null}">
+                        <input hidden th:field="*{dni}">
+                    </div>
                     <!-- will only show user dni when not present   -->
-                    <div th:if="${user.dni == null}" class="m-2">
+                    <div th:if="${user.dni == null || !errors.isEmpty()}" class="m-2">
                         <div>
                             <label>DNI</label>
                         </div>
@@ -24,7 +23,7 @@
                                 class="text-center"
                                 type="text"
                                 th:field="*{dni}"
-                                placeholder="11222333"
+                                placeholder="sample: 56765432"
                             >
                             <!-- Error -->
                             <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="color:red;"></div>
