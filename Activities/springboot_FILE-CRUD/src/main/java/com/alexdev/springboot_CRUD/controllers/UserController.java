@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,8 +21,9 @@ public class UserController {
     @Autowired
     IUserService userService;
 
+
     @GetMapping
-    public String getListUsers(Model model){
+    public String getListUsers(Model model) {
         model.addAttribute("title", "List of Users!");
         model.addAttribute("users", userService.getAll());
 
@@ -29,34 +31,31 @@ public class UserController {
     }
 
     @GetMapping("/form")
-    public String formUser(User user, Model model){
+    public String formUser(@RequestParam(required = false) String dni, Model model) {
         model.addAttribute("title", "Create user");
+        model.addAttribute("user", new User());
 
-        Optional.ofNullable(user.getDni())
-                        .flatMap(d -> userService.searchByDNI(d))
-                                .ifPresent(u -> {
-                                    model.addAttribute("user", u);
-                                    model.addAttribute("title", "Update user");
-                                });
-
-        model.addAttribute("professions", PROFESSION.values());
+        Optional.ofNullable(dni)
+                .flatMap(d -> userService.searchByDNI(d))
+                .ifPresent(u -> {
+                    model.addAttribute("title", "Update user");
+                    model.addAttribute("user", u);
+                });
 
         return "form";
     }
 
     @PostMapping("/form")
-    public String postFormUser(@Valid User user, BindingResult validations, Model model){
-        if(validations.hasErrors()){
+    public String postFormUser(@Valid User user, BindingResult validations, Model model) {
+        if (validations.hasErrors()) {
             model.addAttribute("title", "Error! Check values");
-            model.addAttribute("professions", PROFESSION.values());
 
             Map<String, String> errors = Validations.getErrors(validations.getFieldErrors());
             model.addAttribute("errors", errors);
-            model.addAttribute("containsErrors", (errors.isEmpty()));
 
             return "form";
         }
-        user.setDni(user.getDni().replace(",",""));
+        user.setDni(user.getDni().replace(",", ""));
         Optional.of(user)
                 .ifPresent(u -> userService.save(u));
 
@@ -65,10 +64,26 @@ public class UserController {
     }
 
     @GetMapping("/delete")
-    public String deleteUser(@RequestParam String dni, Model model){
+    public String deleteUser(@RequestParam String dni, Model model) {
         Optional.ofNullable(dni)
                 .ifPresent(d -> userService.deleteBy(d));
 
         return "redirect:/user";
+    }
+
+
+    @ModelAttribute(name = "title")
+    public String getTitle() {
+        return "Title Custom";
+    }
+
+    @ModelAttribute(name = "professions")
+    public PROFESSION[] getProfessions() {
+        return PROFESSION.values();
+    }
+
+    @ModelAttribute(name = "errors")
+    public Map<String, String> getErrors() {
+        return new LinkedHashMap<>();
     }
 }
