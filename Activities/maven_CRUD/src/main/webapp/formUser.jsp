@@ -5,6 +5,29 @@
             <h1 class="d-inline bg-dark text-light">Register / Update Person</h1>
             <div class="d-flex justify-content-center align-items-center m-2">
                 <form class="p-2 w-50 rounded" style="background-color: #DEDEDE;" action="${pageContext.request.contextPath}/form" method="POST">
+                    <jstl:choose>
+                        <jstl:when test="${user.dni == null}">
+                            <div class="m-2">
+                                <div>
+                                    <label>DNI</label>
+                                </div>
+                                <div>
+                                    <input
+                                            class="text-center"
+                                            type="text"
+                                            name="dni"
+                                            placeholder="11222333">
+                                </div>
+                            </div>
+                        </jstl:when>
+                        <jstl:otherwise>
+                            <input
+                                    hidden
+                                    name="dni"
+                                    type="text"
+                                    value="${user.dni}">
+                        </jstl:otherwise>
+                    </jstl:choose>
                     <div class="m-2">
                         <div>
                             <label>Name</label>
@@ -32,29 +55,6 @@
                                     placeholder="Gates">
                         </div>
                     </div>
-                    <jstl:choose>
-                        <jstl:when test="${user.dni == null}">
-                            <div class="m-2">
-                                <div>
-                                    <label>DNI</label>
-                                </div>
-                                <div>
-                                    <input
-                                            class="text-center"
-                                            type="text"
-                                            name="dni"
-                                            placeholder="11222333">
-                                </div>
-                            </div>
-                        </jstl:when>
-                        <jstl:otherwise>
-                            <input
-                                    hidden
-                                    name="dni"
-                                    type="text"
-                                    value="${user.dni}">
-                        </jstl:otherwise>
-                    </jstl:choose>
     
                     <div class="m-2">
                         <label>Date of Birth</label>
