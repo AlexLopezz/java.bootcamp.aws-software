@@ -6,7 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Entity(name = "user")
+@Entity
+@Table(name = "db_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -21,11 +22,10 @@ public class User {
     private String lastName;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "date_birth")
     @DateTimeFormat(pattern= "yyyy/MM/dd")
+    @Column(name = "date_birth")
     private Date dateBirth;
 
-    @ManyToOne
-    @JoinColumn(name = "profession_fk", nullable = false)
-    private Profession profession;
+    @Enumerated(EnumType.STRING)
+    private PROFESSION profession;
 }

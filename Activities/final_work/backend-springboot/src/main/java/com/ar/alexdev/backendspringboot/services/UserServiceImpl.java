@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findBy(String dni) {
-        return Optional.ofNullable(dni)
-                .flatMap(this::findBy);
+        return userRepository.findById(dni);
     }
 }

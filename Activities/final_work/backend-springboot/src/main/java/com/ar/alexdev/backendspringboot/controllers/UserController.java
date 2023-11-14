@@ -1,12 +1,18 @@
 package com.ar.alexdev.backendspringboot.controllers;
 
-import com.ar.alexdev.backendspringboot.exceptions.MessageResponse;
+import com.ar.alexdev.backendspringboot.exception.UserException;
 import com.ar.alexdev.backendspringboot.models.User;
 import com.ar.alexdev.backendspringboot.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,57 +21,75 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Operation(summary = "Fetch all users from database!", tags = "User endpoints")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of users in database", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "204", description = "OK! but no users in database"),
+            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+    })
     @GetMapping
     public ResponseEntity<?> getAllUsers(){
-        return ResponseEntity
-                .status(200)
-                .body(userService.getAllUsers());
+        List<User> users = userService.getAllUsers();
+
+        if(users.isEmpty())
+            return ResponseEntity.status(204).build();
+
+        return ResponseEntity.ok(users);
     }
 
+    @Operation(summary = "Save a database user!", tags = "User endpoints")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User successfully saved.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "User exist into database.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+    })
     @PostMapping
-    public ResponseEntity<?> saveUser(User u){
-        Optional<User> userFound=  userService.findBy(u.getDni());
+    public ResponseEntity<?> saveUser(User user){
+        Optional<User> userFound=  userService.findBy(user.getDni());
         if(userFound.isPresent())
-            return ResponseEntity.status(400)
-                    .body(MessageResponse.builder()
-                            .message("User with dni ".concat(u.getDni()).concat( "already exist..."))
-                    .build()
-            );
+            throw new UserException(
+                    "User with dni: ".concat(user.getDni()).concat(" already exist into database."),
+                    HttpStatusCode.valueOf(400));
 
         return ResponseEntity
                 .status(201)
-                .body(userService.save(u));
+                .body(userService.save(user));
     }
 
+    @Operation(summary = "Update a database user!", tags = "User endpoints")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User succesfully updated", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "User not found in database", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+    })
     @PutMapping
-    public ResponseEntity<?> updateUser(User u){
-        if(userService.findBy(u.getDni()).isPresent())
+    public ResponseEntity<?> updateUser(User user){
+        if(userService.findBy(user.getDni()).isPresent())
             return ResponseEntity
-                    .ok(userService.save(u));
-
-        return ResponseEntity
-                .status(404)
-                .body(MessageResponse
-                        .builder()
-                        .message("User with dni: ".concat(u.getDni()).concat(" not found..."))
-                    .build());
+                    .ok(userService.save(user));
+        else
+            throw new UserException(
+                    "User with dni: ".concat(user.getDni()).concat(" not found..."),
+                    HttpStatusCode.valueOf(404)
+            );
     }
-    @DeleteMapping
-    public ResponseEntity<?> deleteUser(@RequestParam(name = "dni")String dni){
+
+    @Operation(summary = "Delete a database user!", tags = "User endpoints")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User succesfully deleted.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "User not found to remove from database.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+    })
+    @DeleteMapping("/{dni}")
+    public ResponseEntity<?> deleteUser(@PathVariable(name = "dni") String dni){
         if(userService.findBy(dni).isPresent())
             return ResponseEntity
                     .status(200)
-                    .body(MessageResponse
-                            .builder()
-                            .message("User successfully deleted...")
-                    .build());
-
-        return ResponseEntity
-                .status(404)
-                .body(MessageResponse
-                        .builder()
-                        .message("User with dni: ".concat(dni).concat(" not found..."))
-                        .build());
+                    .body("User successfully deleted...");
+        else
+            throw new UserException(
+                    "User with dni: ".concat(dni).concat(" not found..."),
+                    HttpStatusCode.valueOf(404)
+            );
     }
-
 }

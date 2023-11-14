@@ -1,4 +1,4 @@
-package com.alexdev.springboot_CRUD.models.enums;
+package com.ar.alexdev.backendspringboot.models;
 
 import lombok.Getter;
 
