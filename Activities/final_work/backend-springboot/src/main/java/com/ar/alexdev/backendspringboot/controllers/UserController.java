@@ -45,11 +45,12 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<?> saveUser(User user){
-        Optional<User> userFound=  userService.findBy(user.getDni());
-        if(userFound.isPresent())
-            throw new UserException(
-                    "User with dni: ".concat(user.getDni()).concat(" already exist into database."),
-                    HttpStatusCode.valueOf(400));
+        userService.findBy(user.getDni())
+                .ifPresent(u ->{
+                    throw new UserException(
+                            "User with dni: ".concat(user.getDni()).concat(" already exist into database."),
+                            HttpStatusCode.valueOf(400));
+                });
 
         return ResponseEntity
                 .status(201)
