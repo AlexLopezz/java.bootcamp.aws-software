@@ -1,13 +1,13 @@
-package com.ar.alexdev.backendspringboot;
+package com.ar.alexdev.validatorspringboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BackendSpringbootApplication {
+public class ValidatorSpringbootApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BackendSpringbootApplication.class, args);
+		SpringApplication.run(ValidatorSpringbootApplication.class, args);
 	}
 
 }
