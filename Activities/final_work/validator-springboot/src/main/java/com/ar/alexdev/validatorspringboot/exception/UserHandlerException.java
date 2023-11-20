@@ -44,15 +44,10 @@ public class UserHandlerException {
         return ue.getMessage();
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public Map<String, String> jsonException(HttpMessageNotReadableException jsonException){
-        if(jsonException.getMessage().contains("Date"))
-            errors.put("dateBirth", messageForField("dateBirth"));
-        else
-            errors.put("profession", messageForField("profession"));
-
-        return errors;
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleJsonException(HttpMessageNotReadableException ex) {
+        return "Error en la solicitud JSON: " + ex.getMessage();
     }
 
 
