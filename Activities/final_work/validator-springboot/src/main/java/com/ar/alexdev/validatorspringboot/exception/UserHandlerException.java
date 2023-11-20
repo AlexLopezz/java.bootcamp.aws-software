@@ -1,26 +1,24 @@
 package com.ar.alexdev.validatorspringboot.exception;
 
+import com.ar.alexdev.validatorspringboot.utils.ExceptionMessage;
 import com.ar.alexdev.validatorspringboot.dto.PROFESSION;
 import com.ar.alexdev.validatorspringboot.utils.UserExceptionProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class UserHandlerException {
-
     @Autowired
     UserExceptionProperties userExceptionProperties;
-
+    @Autowired
+    ExceptionMessage exceptionMessage;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserValidateException.class)
@@ -36,14 +34,8 @@ public class UserHandlerException {
         return errors;
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(UserAlreadyExistException.class)
-    public String userExistException(UserAlreadyExistException ue){
-        return ue.getMessage();
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public Map<String, String> handleJsonException(HttpMessageNotReadableException ex) {
         Map<String, String> errors = new HashMap<>();
 
@@ -54,6 +46,32 @@ public class UserHandlerException {
 
 
         return errors;
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ErrorResponse userExistException(UserAlreadyExistException ue){
+        return ErrorResponse.builder()
+                .statusCode(HttpStatus.CONFLICT.value())
+                .errorMessage(ue.getMessage())
+                .build();
+    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public ErrorResponse userExistException(UserNotFoundException unfe){
+        return ErrorResponse.builder()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .errorMessage(unfe.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(UserWithoutAnyValueException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse userWithouAnyValueException(UserWithoutAnyValueException ex) {
+        return ErrorResponse.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .errorMessage(ex.getMessage())
+                .build();
     }
 
 
