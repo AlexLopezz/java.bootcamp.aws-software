@@ -18,16 +18,14 @@ import java.util.stream.Stream;
 @RestControllerAdvice
 public class UserHandlerException {
 
-    private final Map<String, String> errors = new HashMap<>();
-
     @Autowired
     UserExceptionProperties userExceptionProperties;
-
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserValidateException.class)
     public Map<String, String> badRequestException(UserValidateException validateException){
+        Map<String, String> errors = new HashMap<>();
         validateException.getErrors()
                 .forEach(e -> {
                     String field = e.getField();
@@ -47,6 +45,8 @@ public class UserHandlerException {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleJsonException(HttpMessageNotReadableException ex) {
+        Map<String, String> errors = new HashMap<>();
+
         if(ex.getMessage().contains("Date"))
             errors.put("dateBirth", messageForField("dateBirth"));
         else
