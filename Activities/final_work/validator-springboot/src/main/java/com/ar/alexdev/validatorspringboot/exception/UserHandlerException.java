@@ -12,44 +12,47 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.swing.text.html.Option;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class UserHandlerException {
+
+    private final Map<String, String> errors = new HashMap<>();
+
     @Autowired
     UserExceptionProperties userExceptionProperties;
 
 
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value= {UserValidateException.class, HttpMessageNotReadableException.class})
-    public Map<String, String> badRequestException(RuntimeException exception){
-        Map<String, String> err = new LinkedHashMap<>();
-        if(exception instanceof UserValidateException validateException) {
-            validateException.getErrors()
-                    .forEach(e -> {
-                        String field = e.getField();
-                        err.put(field, messageForField(field));
-                    });
-        }
+    @ExceptionHandler(UserValidateException.class)
+    public Map<String, String> badRequestException(UserValidateException validateException){
+        validateException.getErrors()
+                .forEach(e -> {
+                    String field = e.getField();
+                    errors.put(field, messageForField(field));
+                });
 
-        if(exception instanceof HttpMessageNotReadableException jsonException){
-            if(jsonException.getMessage().contains("Date"))
-                err.put("dateBirth", messageForField("dateBirth"));
-            else
-                err.put("profession", messageForField("profession"));
-        }
 
-        return err;
+        return errors;
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UserAlreadyExistException.class)
     public String userExistException(UserAlreadyExistException ue){
         return ue.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Map<String, String> jsonException(HttpMessageNotReadableException jsonException){
+        if(jsonException.getMessage().contains("Date"))
+            errors.put("dateBirth", messageForField("dateBirth"));
+        else
+            errors.put("profession", messageForField("profession"));
+
+        return errors;
     }
 
 
