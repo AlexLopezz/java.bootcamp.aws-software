@@ -8,9 +8,12 @@ import com.ar.alexdev.validatorspringboot.dto.UserRequestPut;
 import com.ar.alexdev.validatorspringboot.exception.UserValidateException;
 import com.ar.alexdev.validatorspringboot.exception.UserWithoutAnyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -37,7 +40,12 @@ public class UserValidateService {
     }
 
     public boolean checkUserExist(String dni){
-        if(dni.equals(dniToFound))
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<UserRequestPost> response
+                = restTemplate.getForEntity("http://localhost:8080/user/".concat(dni), UserRequestPost.class);
+
+        System.out.println(response);
+        if(response.getStatusCode() == HttpStatusCode.valueOf(200))
             return true;
         else
             throw new UserNotFoundException(exceptionMessage.messageNotFound, dni);

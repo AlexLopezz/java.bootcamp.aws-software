@@ -93,4 +93,11 @@ public class UserController {
                     HttpStatusCode.valueOf(404)
             );
     }
+    @GetMapping("/{dni}")
+    public ResponseEntity<?> getUser(@PathVariable String dni){
+        User u = userService.findBy(dni)
+                .orElseThrow(() -> new UserException("User with dni ".concat(dni).concat(" not found"), HttpStatusCode.valueOf(404)));
+
+        return ResponseEntity.ok(u);
+    }
 }

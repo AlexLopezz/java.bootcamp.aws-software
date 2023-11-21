@@ -1,5 +1,6 @@
 package com.ar.alexdev.backendspringboot.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,14 +19,16 @@ public class User {
 
     private String name;
 
-    @Column(name = "last_name")
     private String lastName;
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern= "yyyy/MM/dd")
-    @Column(name = "date_birth")
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date dateBirth;
 
-    @Enumerated(EnumType.STRING)
+    private String email;
+
+    private String phone;
+
     private PROFESSION profession;
 }
