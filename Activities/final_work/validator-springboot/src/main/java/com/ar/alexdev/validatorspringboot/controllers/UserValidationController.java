@@ -1,5 +1,6 @@
 package com.ar.alexdev.validatorspringboot.controllers;
 
+import com.ar.alexdev.validatorspringboot.dto.MessageRequest;
 import com.ar.alexdev.validatorspringboot.dto.UserRequestPost;
 import com.ar.alexdev.validatorspringboot.dto.UserRequestPut;
 import com.ar.alexdev.validatorspringboot.exception.UserValidateException;
@@ -8,6 +9,7 @@ import com.ar.alexdev.validatorspringboot.services.UserValidateService;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -27,11 +29,11 @@ public class UserValidationController {
     UserValidateService userValidateService;
     @PostMapping
     public ResponseEntity<?> validateDataUserPOST(@Valid @RequestBody UserRequestPost userRequestPost, BindingResult errors){
-        userValidateService.checkPost(userRequestPost, errors);
+        String message= userValidateService.checkPost(userRequestPost, errors);
 
         return ResponseEntity
-                .ok()
-                .build();
+                .ok(MessageRequest.builder()
+                        .message(message).build());
     }
 
     @PutMapping
@@ -45,8 +47,13 @@ public class UserValidationController {
 
     @GetMapping("/{dni}")
     public ResponseEntity<?> validateExistUser(@PathVariable String dni){
-        boolean isValid =  userValidateService.checkUserExist(dni);
+        String message= userValidateService.checkUserExist(dni);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(
+                MessageRequest.
+                        builder()
+                        .message(message)
+                        .build()
+        );
     }
 }

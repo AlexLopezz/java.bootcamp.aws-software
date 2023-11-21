@@ -21,14 +21,21 @@ import java.util.function.Function;
 @Service
 public class UserValidateService {
     @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
     ExceptionMessage exceptionMessage;
 
-    private final String dniToFound = "12345678";
 
-    public void checkPost(UserRequestPost post,BindingResult errors){
+    public String checkPost(UserRequestPost post,BindingResult errors){
         validateFields(errors);
-        if(post.getDni().equals(dniToFound))
-            throw new UserAlreadyExistException(exceptionMessage.messageAlreadyExist, dniToFound);
+
+        ResponseEntity<String> response
+                = restTemplate.getForEntity("http://localhost:8080/user/".concat(post.getDni()), String.class);
+        if(response.getStatusCode() == HttpStatusCode.valueOf(200))
+            return String.format(exceptionMessage.messageAlreadyExist, post.getDni());
+        else
+            throw new UserAlreadyExistException(exceptionMessage.messageAlreadyExist, post.getDni());
 
     }
     public void checkPut(UserRequestPut put, BindingResult errors){
@@ -39,16 +46,14 @@ public class UserValidateService {
                 .orElseThrow(() -> new UserWithoutAnyValueException(exceptionMessage.messageWithoutAnyValue));
     }
 
-    public boolean checkUserExist(String dni){
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<UserRequestPost> response
-                = restTemplate.getForEntity("http://localhost:8080/user/".concat(dni), UserRequestPost.class);
+    public String checkUserExist(String dni){
+        ResponseEntity<String> response
+                = restTemplate.getForEntity("http://localhost:8080/user/".concat(dni), String.class);
 
-        System.out.println(response);
         if(response.getStatusCode() == HttpStatusCode.valueOf(200))
-            return true;
+            return String.format(exceptionMessage.messageAlreadyExist, dni);
         else
-            throw new UserNotFoundException(exceptionMessage.messageNotFound, dni);
+            return String.format(exceptionMessage.messageNotFound, dni);
     }
 
     private void validateFields(BindingResult errors){
