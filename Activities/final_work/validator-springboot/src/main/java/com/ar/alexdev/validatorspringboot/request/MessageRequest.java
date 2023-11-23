@@ -1,4 +1,4 @@
-package com.ar.alexdev.validatorspringboot.dto;
+package com.ar.alexdev.validatorspringboot.request;
 
 import lombok.Builder;
 import lombok.Getter;

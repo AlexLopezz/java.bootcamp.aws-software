@@ -1,4 +1,4 @@
-package com.ar.alexdev.validatorspringboot.dto;
+package com.ar.alexdev.validatorspringboot.request;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;

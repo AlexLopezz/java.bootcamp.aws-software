@@ -1,7 +1,7 @@
 package com.ar.alexdev.validatorspringboot.exception;
 
 import com.ar.alexdev.validatorspringboot.utils.ExceptionMessage;
-import com.ar.alexdev.validatorspringboot.dto.PROFESSION;
+import com.ar.alexdev.validatorspringboot.request.PROFESSION;
 import com.ar.alexdev.validatorspringboot.utils.UserExceptionProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,7 +53,7 @@ public class UserHandlerException {
     public ErrorResponse userExistException(UserAlreadyExistException ue){
         return ErrorResponse.builder()
                 .statusCode(HttpStatus.CONFLICT.value())
-                .errorMessage(ue.getMessage())
+                .errorMessage(String.format(exceptionMessage.messageAlreadyExist, ue.getMessage()))
                 .build();
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -61,7 +61,7 @@ public class UserHandlerException {
     public ErrorResponse userExistException(UserNotFoundException unfe){
         return ErrorResponse.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
-                .errorMessage(unfe.getMessage())
+                .errorMessage(String.format(exceptionMessage.messageNotFound, unfe.getMessage()))
                 .build();
     }
 
@@ -70,7 +70,7 @@ public class UserHandlerException {
     public ErrorResponse userWithouAnyValueException(UserWithoutAnyValueException ex) {
         return ErrorResponse.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .errorMessage(ex.getMessage())
+                .errorMessage(exceptionMessage.messageWithoutAnyValue)
                 .build();
     }
 

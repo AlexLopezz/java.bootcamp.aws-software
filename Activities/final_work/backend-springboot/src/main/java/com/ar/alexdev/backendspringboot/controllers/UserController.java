@@ -93,6 +93,13 @@ public class UserController {
                     HttpStatusCode.valueOf(404)
             );
     }
+
+    @Operation(summary = "Get user by dni", tags = "User endpoints")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get user by dni", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "User by dni, not found"),
+            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+    })
     @GetMapping("/{dni}")
     public ResponseEntity<?> getUser(@PathVariable String dni){
         User u = userService.findBy(dni)
