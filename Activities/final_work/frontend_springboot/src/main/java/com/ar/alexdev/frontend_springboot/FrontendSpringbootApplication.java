@@ -1,4 +1,4 @@
-package com.ar.alexdev.frontendspringboot;
+package com.ar.alexdev.frontend_springboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
