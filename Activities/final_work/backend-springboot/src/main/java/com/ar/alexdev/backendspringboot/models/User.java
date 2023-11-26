@@ -7,8 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "db_user")
+@Entity(name = "db_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,13 +21,14 @@ public class User {
     private String lastName;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern= "yyyy/MM/dd")
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern= "yyyy-MM-dd")
     private Date dateBirth;
 
     private String email;
 
     private String phone;
 
-    private PROFESSION profession;
+    @ManyToOne(targetEntity = Profession.class, fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "profession_fk")
+    private Profession profession;
 }

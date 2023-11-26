@@ -1,5 +1,6 @@
 package com.ar.alexdev.frontend_springboot.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
@@ -9,7 +10,7 @@ public enum PROFESSION {
     QA_TESTER("Tester QA"),
     FULLSTACK_DEVELOPER("Fullstack Developer");
 
-
+    @JsonValue
     private final String value;
 
     PROFESSION(String s) {

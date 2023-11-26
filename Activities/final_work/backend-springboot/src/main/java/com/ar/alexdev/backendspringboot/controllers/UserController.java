@@ -2,6 +2,7 @@ package com.ar.alexdev.backendspringboot.controllers;
 
 import com.ar.alexdev.backendspringboot.exception.UserException;
 import com.ar.alexdev.backendspringboot.models.User;
+import com.ar.alexdev.backendspringboot.models.dto.UserDTO;
 import com.ar.alexdev.backendspringboot.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,7 +30,8 @@ public class UserController {
     })
     @GetMapping
     public ResponseEntity<?> getAllUsers(){
-        List<User> users = userService.getAllUsers();
+        List<UserDTO> users = userService
+                .getAllUsers();
 
         if(users.isEmpty())
             return ResponseEntity.status(204).build();
@@ -44,7 +46,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal error from api."),
     })
     @PostMapping
-    public ResponseEntity<?> saveUser(@RequestBody User user){
+    public ResponseEntity<?> saveUser(@RequestBody UserDTO user){
         userService.findBy(user.getDni())
                 .ifPresent(u ->{
                     throw new UserException(
@@ -64,7 +66,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal error from api."),
     })
     @PutMapping
-    public ResponseEntity<?> updateUser(User user){
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO user){
         if(userService.findBy(user.getDni()).isPresent())
             return ResponseEntity
                     .ok(userService.save(user));
@@ -83,11 +85,13 @@ public class UserController {
     })
     @DeleteMapping("/{dni}")
     public ResponseEntity<?> deleteUser(@PathVariable(name = "dni") String dni){
-        if(userService.findBy(dni).isPresent())
+        if(userService.findBy(dni).isPresent()) {
+            userService.delete(dni);
+
             return ResponseEntity
                     .status(200)
-                    .body("User successfully deleted...");
-        else
+                    .build();
+        }else
             throw new UserException(
                     "User with dni: ".concat(dni).concat(" not found..."),
                     HttpStatusCode.valueOf(404)
@@ -102,7 +106,7 @@ public class UserController {
     })
     @GetMapping("/{dni}")
     public ResponseEntity<?> getUser(@PathVariable String dni){
-        User u = userService.findBy(dni)
+        UserDTO u = userService.findBy(dni)
                 .orElseThrow(() -> new UserException("User with dni ".concat(dni).concat(" not found"), HttpStatusCode.valueOf(404)));
 
         return ResponseEntity.ok(u);
