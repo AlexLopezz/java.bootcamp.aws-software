@@ -1,4 +1,4 @@
-package com.ar.alexdev.frontend_springboot.dto;
+package com.ar.alexdev.frontend_springboot.model;
 
 import lombok.Getter;
 

@@ -1,13 +1,10 @@
 package com.ar.alexdev.frontend_springboot.controllers;
 
-import com.ar.alexdev.frontend_springboot.dto.PROFESSION;
-import com.ar.alexdev.frontend_springboot.dto.User;
+import com.ar.alexdev.frontend_springboot.model.PROFESSION;
+import com.ar.alexdev.frontend_springboot.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +37,44 @@ public class UserController {
         return "listUser";
     }
 
+    @GetMapping("/form")
+    public String formGetUserView(@RequestParam(required = false) String dni, Model model) {
+        model.addAttribute("title", "Create user");
+        model.addAttribute("user", new User());
 
+        /*
+        Optional.ofNullable(dni)
+                .flatMap(d -> userService.searchByDNI(d))
+                .ifPresent(u -> {
+                    model.addAttribute("title", "Update user");
+                    model.addAttribute("user", u);
+                }); */
+
+        return "formUser";
+    }
+
+    @PostMapping("/form")
+    public String formPostUserView(@RequestBody User user, Model model) {
+
+        /*
+        Optional.ofNullable(dni)
+                .flatMap(d -> userService.searchByDNI(d))
+                .ifPresent(u -> {
+                    model.addAttribute("title", "Update user");
+                    model.addAttribute("user", u);
+                }); */
+
+        return "listUser";
+    }
+
+
+
+
+
+    @ModelAttribute(name = "professions")
+    public PROFESSION[] professions(){
+        return PROFESSION.values();
+    }
     @ModelAttribute(name = "headerPage")
     public String headerPage(){
         return "List of users - Frontend App";
