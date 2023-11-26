@@ -44,7 +44,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal error from api."),
     })
     @PostMapping
-    public ResponseEntity<?> saveUser(User user){
+    public ResponseEntity<?> saveUser(@RequestBody User user){
         userService.findBy(user.getDni())
                 .ifPresent(u ->{
                     throw new UserException(

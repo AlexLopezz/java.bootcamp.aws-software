@@ -52,7 +52,6 @@ public class UserHandlerException {
     @ExceptionHandler(UserAlreadyExistException.class)
     public ErrorResponse userExistException(UserAlreadyExistException ue){
         return ErrorResponse.builder()
-                .statusCode(HttpStatus.CONFLICT.value())
                 .errorMessage(String.format(exceptionMessage.messageAlreadyExist, ue.getMessage()))
                 .build();
     }
@@ -60,7 +59,6 @@ public class UserHandlerException {
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse userExistException(UserNotFoundException unfe){
         return ErrorResponse.builder()
-                .statusCode(HttpStatus.NOT_FOUND.value())
                 .errorMessage(String.format(exceptionMessage.messageNotFound, unfe.getMessage()))
                 .build();
     }
@@ -69,7 +67,6 @@ public class UserHandlerException {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse userWithouAnyValueException(UserWithoutAnyValueException ex) {
         return ErrorResponse.builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .errorMessage(exceptionMessage.messageWithoutAnyValue)
                 .build();
     }
