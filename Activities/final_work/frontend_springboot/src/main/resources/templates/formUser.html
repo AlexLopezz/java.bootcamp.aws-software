@@ -14,7 +14,7 @@
             <div th:if="${edit}">
                 <input hidden th:field="*{dni}">
             </div>
-            <div th:if="${edit == false && errors.containsKey('dni')}" class="m-2">
+            <div th:if="${!edit}" class="m-2">
                 <div>
                     <label>DNI</label>
                 </div>

@@ -4,6 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Configuration
 public class AppConfig {
     @Bean
@@ -12,7 +16,7 @@ public class AppConfig {
     }
 
     @Bean
-    JsonHandler jsonHandler(){
-        return new JsonHandler();
+    Map<String, Object> cache(){
+        return new LinkedHashMap<>();
     }
 }

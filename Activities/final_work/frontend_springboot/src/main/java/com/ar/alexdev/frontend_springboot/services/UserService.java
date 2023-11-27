@@ -21,12 +21,12 @@ public class UserService {
 
     @Autowired
     UserValidate userValidate;
-
     public List<UserDTO> getUsers() {
         try {
             UserDTO[] usersData = restTemplate.getForObject(
                     urlBackend.concat("/user"), UserDTO[].class);
             return Arrays.asList(Objects.requireNonNull(usersData));
+
         }catch (NullPointerException ignored){
             return new LinkedList<>();
         }

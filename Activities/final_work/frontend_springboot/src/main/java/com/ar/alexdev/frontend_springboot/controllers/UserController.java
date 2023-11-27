@@ -1,6 +1,5 @@
 package com.ar.alexdev.frontend_springboot.controllers;
 
-import com.ar.alexdev.frontend_springboot.component.JsonHandler;
 import com.ar.alexdev.frontend_springboot.model.Profession;
 import com.ar.alexdev.frontend_springboot.model.UserDTO;
 import com.ar.alexdev.frontend_springboot.services.ProfessionService;
@@ -8,7 +7,6 @@ import com.ar.alexdev.frontend_springboot.services.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
@@ -26,7 +24,7 @@ public class UserController {
     @Autowired
     ProfessionService professionService;
     @Autowired
-    JsonHandler jsonHandler;
+    Map<String, Object> cache;
 
     @GetMapping
     public String listUserView(Model model){
@@ -45,9 +43,10 @@ public class UserController {
         Optional.ofNullable(dni)
                 .flatMap(d -> userService.findBy(d))
                 .ifPresent(u -> {
+                    cache.put("user", u);
                     model.addAttribute("edit",true);
                     model.addAttribute("title", "Update user");
-                    model.addAttribute("user", u);
+                    model.addAttribute("user", cache.get("user"));
                 });
 
         return "formUser";
@@ -60,9 +59,10 @@ public class UserController {
 
             return "redirect:/user";
 
-        }catch (HttpClientErrorException e){
-            if(!user.getDni().isEmpty() && editForm())
-                model.addAttribute("edit", true);
+        }catch (HttpClientErrorException e) {
+            if(user.getDni() != null)
+                if(isUserDniEquals(user.getDni()))
+                    model.addAttribute("edit", true);
 
             model.addAttribute("title", "Error! Check values");
             if(e.getStatusCode() == HttpStatusCode.valueOf(400)) {
@@ -78,9 +78,12 @@ public class UserController {
     }
 
     @GetMapping("/delete")
-    public String deleteUser(@RequestParam String dni, Model model){
-        Optional.ofNullable(dni)
-                .ifPresent(d -> userService.delete(d));
+    public String deleteUser(@RequestParam String dni){
+        if(isUserDniEquals(dni))
+                userService.delete(dni);
+        else
+            Optional.ofNullable(dni)
+                    .ifPresent(d -> userService.delete(d));
 
         return "redirect:/user";
     }
@@ -97,9 +100,16 @@ public class UserController {
     public Map<String, String> getErrors() {
         return new LinkedHashMap<>();
     }
+
     @ModelAttribute(name = "edit")
-    public boolean editForm() {
+    public boolean editForm(){ return false; }
+
+
+    private boolean isUserDniEquals(String dni) {
+        if (cache.get("user") != null) {
+            UserDTO user = (UserDTO) cache.get("user");
+            return user.getDni().equals(dni);
+        }
         return false;
     }
-
 }
