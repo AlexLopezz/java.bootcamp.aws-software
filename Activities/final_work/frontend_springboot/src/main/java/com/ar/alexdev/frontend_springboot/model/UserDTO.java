@@ -5,17 +5,23 @@ import lombok.*;
 
 import java.util.Date;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter @Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class User {
+public class UserDTO {
     private String dni;
+
     private String name;
+
     private String lastName;
+
+    private String dateBirth;
+
     private String email;
+
     private String phone;
-    @JsonFormat(pattern = "yyyy/MM/dd")
-    private Date dateBirth;
-    private PROFESSION profession;
+
+    private String profession;
 }

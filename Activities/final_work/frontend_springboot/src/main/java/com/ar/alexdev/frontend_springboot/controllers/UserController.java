@@ -1,28 +1,37 @@
 package com.ar.alexdev.frontend_springboot.controllers;
 
-import com.ar.alexdev.frontend_springboot.model.PROFESSION;
-import com.ar.alexdev.frontend_springboot.model.User;
+import com.ar.alexdev.frontend_springboot.component.JsonHandler;
+import com.ar.alexdev.frontend_springboot.model.Profession;
+import com.ar.alexdev.frontend_springboot.model.UserDTO;
+import com.ar.alexdev.frontend_springboot.services.ProfessionService;
 import com.ar.alexdev.frontend_springboot.services.UserService;
-import com.ar.alexdev.frontend_springboot.validator.Validator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    ProfessionService professionService;
+    @Autowired
+    JsonHandler jsonHandler;
 
     @GetMapping
     public String listUserView(Model model){
         model.addAttribute("title", "List of users");
-         List<User> u = userService.getUsers();
+        List<UserDTO> u = userService.getUsers();
         model.addAttribute("users", u);
 
         return "listUser";
@@ -31,46 +40,66 @@ public class UserController {
     @GetMapping("/form")
     public String formGetUserView(@RequestParam(required = false) String dni, Model model) {
         model.addAttribute("title", "Create user");
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserDTO());
 
-        /*
         Optional.ofNullable(dni)
-                .flatMap(d -> userService.searchByDNI(d))
+                .flatMap(d -> userService.findBy(d))
                 .ifPresent(u -> {
+                    model.addAttribute("edit",true);
                     model.addAttribute("title", "Update user");
                     model.addAttribute("user", u);
-                }); */
+                });
 
         return "formUser";
     }
 
     @PostMapping("/form")
-    public String formPostUserView(@RequestBody User user, Model model) {
+    public String formPostUserView(UserDTO user, Model model) throws JsonProcessingException {
         try {
             userService.save(user);
 
+            return "redirect:/user";
+
         }catch (HttpClientErrorException e){
-            model.addAttribute("title", "Error! Check field values!");
-            model.addAttribute("errors", Validator.getErrors(e.getResponseBodyAsString()));
+            if(!user.getDni().isEmpty() && editForm())
+                model.addAttribute("edit", true);
+
+            model.addAttribute("title", "Error! Check values");
+            if(e.getStatusCode() == HttpStatusCode.valueOf(400)) {
+                ObjectMapper mapper = new ObjectMapper();
+                TypeReference<HashMap<String,Object>> typeRef = new TypeReference<>() {};
+                HashMap<String,Object> errors = mapper.readValue(e.getResponseBodyAsString(), typeRef);
+                model.addAttribute("errors", errors);
+            }
+            model.addAttribute("user", user);
 
             return "formUser";
         }
+    }
+
+    @GetMapping("/delete")
+    public String deleteUser(@RequestParam String dni, Model model){
+        Optional.ofNullable(dni)
+                .ifPresent(d -> userService.delete(d));
 
         return "redirect:/user";
     }
 
-
-
-
-
     @ModelAttribute(name = "professions")
-    public PROFESSION[] professions(){
-        return PROFESSION.values();
+    public List<Profession> professions(){
+        return professionService.getAll();
     }
     @ModelAttribute(name = "headerPage")
     public String headerPage(){
         return "List of users - Frontend App";
     }
-
+    @ModelAttribute(name = "errors")
+    public Map<String, String> getErrors() {
+        return new LinkedHashMap<>();
+    }
+    @ModelAttribute(name = "edit")
+    public boolean editForm() {
+        return false;
+    }
 
 }

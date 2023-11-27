@@ -3,6 +3,7 @@ package com.ar.alexdev.validatorspringboot.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +33,8 @@ public class UserRequestPost {
     @Pattern(regexp = "^\\+54\\s(\\d{2,4})(\\-|\\s)(\\d{6,8})$")
     private String phone;
 
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Past
     @NotNull
     private Date dateBirth;
 

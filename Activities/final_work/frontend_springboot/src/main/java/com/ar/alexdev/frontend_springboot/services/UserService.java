@@ -1,6 +1,6 @@
 package com.ar.alexdev.frontend_springboot.services;
 
-import com.ar.alexdev.frontend_springboot.model.User;
+import com.ar.alexdev.frontend_springboot.model.UserDTO;
 import com.ar.alexdev.frontend_springboot.validator.UserValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,10 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class UserService {
@@ -25,17 +22,45 @@ public class UserService {
     @Autowired
     UserValidate userValidate;
 
-    public List<User> getUsers() {
-        User[] usersData = restTemplate.getForObject(
-                urlBackend.concat("/user"), User[].class);
-        return Arrays.asList(Objects.requireNonNull(usersData));
+    public List<UserDTO> getUsers() {
+        try {
+            UserDTO[] usersData = restTemplate.getForObject(
+                    urlBackend.concat("/user"), UserDTO[].class);
+            return Arrays.asList(Objects.requireNonNull(usersData));
+        }catch (NullPointerException ignored){
+            return new LinkedList<>();
+        }
     }
 
-    public User save(User user) throws HttpClientErrorException{
-        userValidate.postValidate(user);
-        ResponseEntity<User> userResponse = restTemplate.postForEntity(urlBackend, user ,User.class);
+    public void save(UserDTO user) throws HttpClientErrorException{
+        try {
+            userValidate.getValidate(user.getDni());
+            userValidate.putValidate(user);
+            restTemplate.put(
+                    urlBackend.concat("/user"),
+                    user
+            );
+        }catch (HttpClientErrorException e){
+            userValidate.postValidate(user);
+            restTemplate.postForObject(
+                    urlBackend.concat("/user"),
+                    user ,
+                    UserDTO.class
+            );
+        }
+    }
+    public Optional<UserDTO> findBy(String dni) throws HttpClientErrorException{
+        ResponseEntity<UserDTO> user=  restTemplate.getForEntity(
+                urlBackend.concat("/user/".concat(dni)),
+                UserDTO.class
+        );
 
-        return userResponse.getBody();
+        return Optional.ofNullable(user.getBody());
+    }
+
+    public void delete(String dni) throws HttpClientErrorException{
+        userValidate.getValidate(dni);
+        restTemplate.delete(urlBackend.concat("/user/").concat(dni));
     }
 
 }

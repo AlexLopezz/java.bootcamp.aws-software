@@ -28,7 +28,7 @@ public class UserRequestPut {
     @Pattern(regexp = "^\\+54\\s(\\d{2,4})(\\-|\\s)(\\d{6,8})$")
     private String phone;
 
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateBirth;
 
     private PROFESSION profession;

@@ -10,11 +10,11 @@
     <h1 class="d-inline bg-dark text-light" th:text="${title}"></h1>
     <div class="d-flex justify-content-center align-items-center m-2">
         <form th:action="@{/user/form}" method="POST" th:object="${user}" class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
-            <div th:if="${user.dni != null}">
+
+            <div th:if="${edit}">
                 <input hidden th:field="*{dni}">
             </div>
-            <!-- will only show user dni when not present   -->
-            <div th:if="${user.dni == null || !errors.isEmpty()}" class="m-2">
+            <div th:if="${edit == false && errors.containsKey('dni')}" class="m-2">
                 <div>
                     <label>DNI</label>
                 </div>
@@ -23,10 +23,11 @@
                             class="text-center"
                             type="text"
                             th:field="*{dni}"
-                            placeholder="sample: 56765432"
                     >
                     <!-- Error -->
-                    <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="color:red;"></div>
+                    <div th:if="${errors != null && errors.containsKey('dni')}" style="color:red;">
+                        <p th:text="${errors.get('dni')}"></p>
+                    </div>
                 </div>
             </div>
 
@@ -42,7 +43,9 @@
                             placeholder="Bill">
                 </div>
                 <!-- Error -->
-                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red;"></div>
+                <div th:if="${errors != null && errors.containsKey('name')}" style="color:red;">
+                    <p th:text="${errors.get('name')}"></p>
+                </div>
             </div>
 
             <div class="m-2">
@@ -57,7 +60,10 @@
                             placeholder="Gates"
                     >
                     <!-- Error -->
-                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></div>
+                    <!-- Error -->
+                    <div th:if="${errors != null && errors.containsKey('lastName')}" style="color:red;">
+                        <p th:text="${errors.get('lastName')}"></p>
+                    </div>
                 </div>
             </div>
             <div class="m-2">
@@ -72,7 +78,10 @@
                             placeholder="test@gmail.com"
                     >
                     <!-- Error -->
-                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:red;"></div>
+                    <!-- Error -->
+                    <div th:if="${errors != null && errors.containsKey('email')}" style="color:red;">
+                        <p th:text="${errors.get('email')}"></p>
+                    </div>
                 </div>
             </div>
 
@@ -88,7 +97,10 @@
                             placeholder="+54 11 4353231"
                     >
                     <!-- Error -->
-                    <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" style="color:red;"></div>
+                    <!-- Error -->
+                    <div th:if="${errors != null && errors.containsKey('phone')}" style="color:red;">
+                        <p th:text="${errors.get('phone')}"></p>
+                    </div>
                 </div>
             </div>
 
@@ -100,14 +112,17 @@
                         th:field="*{dateBirth}"
                 >
                 <!-- Error -->
-                <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" style="color:red;"></div>
+                <!-- Error -->
+                <div th:if="${errors != null && errors.containsKey('dateBirth')}" style="color:red;">
+                    <p th:text="${errors.get('dateBirth')}"></p>
+                </div>
             </div>
 
             <div class="m-2">
                 <label>Profession</label>
                 <select th:field="*{profession}" class="text-center" name="profession">
                     <option value="#" disabled selected>--- Select An Option ---</option>
-                    <option th:each="prof : ${professions}" th:value="${prof}" th:text="${prof.value}"></option>
+                    <option th:each="prof : ${professions}" th:value="${prof}" th:text="${prof.name}"></option>
                 </select>
             </div>
 

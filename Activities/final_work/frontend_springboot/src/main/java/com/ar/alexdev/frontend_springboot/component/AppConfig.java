@@ -5,9 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class Util {
+public class AppConfig {
     @Bean
     RestTemplate restTemplate(){
         return new RestTemplate();
+    }
+
+    @Bean
+    JsonHandler jsonHandler(){
+        return new JsonHandler();
     }
 }
