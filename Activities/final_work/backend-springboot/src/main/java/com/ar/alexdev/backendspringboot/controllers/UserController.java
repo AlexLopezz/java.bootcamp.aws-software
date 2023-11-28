@@ -62,7 +62,7 @@ public class UserController {
     @PutMapping
     public void updateUser(@RequestBody UserDTO user){
         userService.findBy(user.getDni())
-                .ifPresentOrElse(u -> userService.save(u),
+                .ifPresentOrElse(u -> userService.save(user),
                         () -> { throw new NotFoundException(user.getDni()); });
     }
 

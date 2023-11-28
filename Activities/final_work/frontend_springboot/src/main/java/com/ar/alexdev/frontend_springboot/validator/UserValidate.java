@@ -17,8 +17,8 @@ public class UserValidate {
     private String urlValidator;
 
     public void postValidate(UserDTO user) throws HttpClientErrorException {
-        ResponseEntity<UserDTO> response = restTemplate
-                .postForEntity(urlValidator.concat("/validate/user"), user, UserDTO.class);
+        restTemplate
+            .postForEntity(urlValidator.concat("/validate/user"), user, UserDTO.class);
     }
     public void putValidate(UserDTO user) throws HttpClientErrorException {
         RestTemplate restTemplate = new RestTemplate();
@@ -31,7 +31,7 @@ public class UserValidate {
         HttpEntity<UserDTO> requestEntity = new HttpEntity<>(user, headers);
 
         // Realizar la solicitud PUT
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
+        restTemplate.exchange(
                 urlValidator.concat("/validate/user"),
                 HttpMethod.PUT,
                 requestEntity,
@@ -39,8 +39,8 @@ public class UserValidate {
         );
     }
     public void getValidate(String dni) throws HttpClientErrorException{
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                                urlValidator.concat("/validate/user/").concat(dni), String.class
+        restTemplate.getForEntity(
+                urlValidator.concat("/validate/user/").concat(dni), String.class
         );
     }
 }
