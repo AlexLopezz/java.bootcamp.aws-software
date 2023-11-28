@@ -1,5 +1,6 @@
 package com.ar.alexdev.backendspringboot.services.implementations;
 
+import com.ar.alexdev.backendspringboot.exception.user.NotFoundException;
 import com.ar.alexdev.backendspringboot.models.User;
 import com.ar.alexdev.backendspringboot.models.dto.UserDTO;
 import com.ar.alexdev.backendspringboot.repositories.UserRepository;
@@ -33,20 +34,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String dni) {
-        Optional<UserDTO> user = findBy(dni);
-        user.ifPresent(u -> userRepository
-                .delete(
-                        userMapper
-                                .mapToEntity(user.orElseThrow())
-                )
-        );
+        findBy(dni)
+                .map(u -> userMapper.mapToEntity(u))
+                .ifPresentOrElse(u -> userRepository.delete(u),
+                        () -> {
+                    throw new NotFoundException(dni);
+                });
     }
 
     @Override
     public Optional<UserDTO> findBy(String dni) {
-        Optional<User> optionalUser = userRepository.findById(dni);
-        return optionalUser
-                .map(user -> userMapper
-                        .mapToDTO(user));
+        return userRepository.findById(dni)
+                .map(u -> userMapper.mapToDTO(u));
     }
 }

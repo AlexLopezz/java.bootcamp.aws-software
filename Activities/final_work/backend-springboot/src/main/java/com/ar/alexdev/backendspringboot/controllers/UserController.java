@@ -1,7 +1,8 @@
 package com.ar.alexdev.backendspringboot.controllers;
 
-import com.ar.alexdev.backendspringboot.exception.UserException;
-import com.ar.alexdev.backendspringboot.models.User;
+import com.ar.alexdev.backendspringboot.exception.user.AlreadyExistException;
+import com.ar.alexdev.backendspringboot.exception.user.NoContentException;
+import com.ar.alexdev.backendspringboot.exception.user.NotFoundException;
 import com.ar.alexdev.backendspringboot.models.dto.UserDTO;
 import com.ar.alexdev.backendspringboot.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,8 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,93 +22,72 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @Operation(summary = "Fetch all users from database!", tags = "User endpoints")
+
+    @Operation(summary = "Fetch all users from database")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of users in database", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "204", description = "OK! but no users in database"),
-            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+            @ApiResponse(responseCode = "200", description = "All OK!", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "204", description = "Everything went well! But there is no content!"),
+            @ApiResponse(responseCode = "500", description = "API Internal Error."),
     })
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public ResponseEntity<?> getAllUsers(){
-        List<UserDTO> users = userService
-                .getAllUsers();
-
-        if(users.isEmpty())
-            return ResponseEntity.status(204).build();
-
-        return ResponseEntity.ok(users);
+    public List<UserDTO> getAllUsers(){
+        return Optional.of(userService.getAllUsers())
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(NoContentException::new);
     }
 
-    @Operation(summary = "Save a database user!", tags = "User endpoints")
+    @Operation(summary = "Save a database user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User successfully saved.", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "User exist into database.", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+            @ApiResponse(responseCode = "409", description = "User already exist.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "API Internal Error."),
     })
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<?> saveUser(@RequestBody UserDTO user){
+    public UserDTO saveUser(@RequestBody UserDTO user){
         userService.findBy(user.getDni())
-                .ifPresent(u ->{
-                    throw new UserException(
-                            "User with dni: ".concat(user.getDni()).concat(" already exist into database."),
-                            HttpStatusCode.valueOf(400));
-                });
+                .ifPresent(u ->{ throw new AlreadyExistException(user.getDni()); });
 
-        return ResponseEntity
-                .status(201)
-                .body(userService.save(user));
+        return userService.save(user);
     }
 
-    @Operation(summary = "Update a database user!", tags = "User endpoints")
+    @Operation(summary = "Update a database user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User succesfully updated", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "User not found in database", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+            @ApiResponse(responseCode = "200", description = "All OK!", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "User not found.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "API Internal Error."),
     })
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO user){
-        if(userService.findBy(user.getDni()).isPresent())
-            return ResponseEntity
-                    .ok(userService.save(user));
-        else
-            throw new UserException(
-                    "User with dni: ".concat(user.getDni()).concat(" not found..."),
-                    HttpStatusCode.valueOf(404)
-            );
+    public void updateUser(@RequestBody UserDTO user){
+        userService.findBy(user.getDni())
+                .ifPresentOrElse(u -> userService.save(u),
+                        () -> { throw new NotFoundException(user.getDni()); });
     }
 
-    @Operation(summary = "Delete a database user!", tags = "User endpoints")
+    @Operation(summary = "Delete a database user!")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User succesfully deleted.", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "User not found to remove from database.", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+            @ApiResponse(responseCode = "200", description = "All OK!", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "API Internal Error."),
     })
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{dni}")
-    public ResponseEntity<?> deleteUser(@PathVariable(name = "dni") String dni){
-        if(userService.findBy(dni).isPresent()) {
-            userService.delete(dni);
-
-            return ResponseEntity
-                    .status(200)
-                    .build();
-        }else
-            throw new UserException(
-                    "User with dni: ".concat(dni).concat(" not found..."),
-                    HttpStatusCode.valueOf(404)
-            );
+    public void deleteUser(@PathVariable(name = "dni") String dni){
+        userService.delete(dni);
     }
 
-    @Operation(summary = "Get user by dni", tags = "User endpoints")
+    @Operation(summary = "Get user by dni")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Get user by dni", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "User by dni, not found"),
-            @ApiResponse(responseCode = "500", description = "Internal error from api."),
+            @ApiResponse(responseCode = "200", description = "All OK!", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "User not found."),
+            @ApiResponse(responseCode = "500", description = "API Internal Error."),
     })
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{dni}")
-    public ResponseEntity<?> getUser(@PathVariable String dni){
-        UserDTO u = userService.findBy(dni)
-                .orElseThrow(() -> new UserException("User with dni ".concat(dni).concat(" not found"), HttpStatusCode.valueOf(404)));
-
-        return ResponseEntity.ok(u);
+    public UserDTO getUser(@PathVariable String dni){
+        return userService.findBy(dni)
+                .orElseThrow(() -> new NotFoundException(dni));
     }
 }

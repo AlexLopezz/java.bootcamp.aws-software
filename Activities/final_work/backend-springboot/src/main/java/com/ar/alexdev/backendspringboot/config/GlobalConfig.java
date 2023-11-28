@@ -10,5 +10,5 @@ public class GlobalConfig {
     @Bean
     public UserMapper userMapper(){
          return new UserMapperImpl();
-     }
+    }
 }
