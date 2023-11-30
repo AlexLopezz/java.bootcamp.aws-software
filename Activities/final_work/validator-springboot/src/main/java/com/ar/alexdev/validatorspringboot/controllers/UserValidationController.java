@@ -27,8 +27,6 @@ public class UserValidationController {
     UserValidateService userValidateService;
 
 
-
-
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Validate the data using the POST method, to make a record.", tags = "User validations")

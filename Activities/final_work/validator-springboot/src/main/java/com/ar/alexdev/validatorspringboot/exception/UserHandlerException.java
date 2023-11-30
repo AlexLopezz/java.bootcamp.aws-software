@@ -85,8 +85,7 @@ public class UserHandlerException {
             case "lastName" -> message = userExceptionProperties.getUser().get("lastName-message");
             case "email" -> message = userExceptionProperties.getUser().get("email-message");
             case "phone" -> message = userExceptionProperties.getUser().get("phone-message");
-            case "dateBirth" -> message = userExceptionProperties.getUser().get("dateBirth-message")
-                    .concat(" and ").concat(userExceptionProperties.getUser().get("dateBirth-past-message"));
+            case "dateBirth" -> message = userExceptionProperties.getUser().get("dateBirth-message");
             case "profession" -> message = userExceptionProperties.getUser().get("profession-message").concat(" ").concat(professions);
         }
 
