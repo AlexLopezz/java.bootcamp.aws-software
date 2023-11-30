@@ -1,4 +1,4 @@
-package com.ar.alexdev.backendspringboot.config;
+package com.ar.alexdev.backendspringboot.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

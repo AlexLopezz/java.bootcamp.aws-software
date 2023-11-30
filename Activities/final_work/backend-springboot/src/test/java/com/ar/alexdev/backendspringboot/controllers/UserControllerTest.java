@@ -1,7 +1,7 @@
 package com.ar.alexdev.backendspringboot.controllers;
 
-import com.ar.alexdev.backendspringboot.config.JsonHandler;
 import com.ar.alexdev.backendspringboot.models.dto.UserDTO;
+import com.ar.alexdev.backendspringboot.utils.JsonHandler;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,12 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Date;
-
+import static com.ar.alexdev.backendspringboot.utils.UserUtils.userBuildDefault;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) //This for order test(@Order)
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
@@ -124,15 +123,5 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
     }
-    private static UserDTO userBuildDefault(){
-        return UserDTO.builder()
-                .name("Alex")
-                .lastName("Lopez")
-                .dni("45657665")
-                .phone("+54 3454 334455")
-                .email("asda@gmail.com")
-                .dateBirth(new Date())
-                .profession("Backend Developer")
-        .build();
-    }
+
 }

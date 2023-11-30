@@ -24,7 +24,7 @@ public class BackendSpringbootApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(String... args) {
 		List<Profession> professions =	List.of(
 				Profession.builder()
 					.name("Backend Developer")
