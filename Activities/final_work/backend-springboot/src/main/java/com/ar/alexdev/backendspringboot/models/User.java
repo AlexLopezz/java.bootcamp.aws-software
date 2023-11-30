@@ -28,7 +28,9 @@ public class User {
 
     private String phone;
 
-    @ManyToOne(targetEntity = Profession.class, fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToOne(targetEntity = Profession.class,
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.DETACH)
     @JoinColumn(name = "profession_fk")
     private Profession profession;
 }

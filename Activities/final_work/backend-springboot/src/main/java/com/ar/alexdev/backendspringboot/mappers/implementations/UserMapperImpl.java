@@ -44,7 +44,7 @@ public class UserMapperImpl implements UserMapper {
     public User mapToEntity(UserDTO user){
         Profession profession = professionService
                 .findByName(user.getProfession())
-                .orElseThrow();
+                .orElse(null);
 
         return User.builder()
                     .dni(user.getDni())

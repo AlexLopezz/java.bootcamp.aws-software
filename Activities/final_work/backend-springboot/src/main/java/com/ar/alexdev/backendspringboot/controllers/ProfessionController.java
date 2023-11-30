@@ -4,9 +4,7 @@ import com.ar.alexdev.backendspringboot.models.Profession;
 import com.ar.alexdev.backendspringboot.services.ProfessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,6 +13,13 @@ import java.util.List;
 public class ProfessionController {
     @Autowired
     ProfessionService professionService;
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Profession save(@RequestBody Profession profession){
+        return professionService.save(profession);
+    }
+
 
     @GetMapping
     public List<Profession> getAll(){
