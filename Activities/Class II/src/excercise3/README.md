@@ -1,4 +1,3 @@
-* Objetivo de este ejercicio:
 # Conversion de numeros
 ## Conversion a binario
     * Metodo que recibe un entero en formato decimal y devuelve un double en formato binario.
