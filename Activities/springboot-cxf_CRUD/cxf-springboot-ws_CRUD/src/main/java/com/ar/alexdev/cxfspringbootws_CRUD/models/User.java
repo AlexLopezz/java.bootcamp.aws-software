@@ -2,12 +2,11 @@ package com.ar.alexdev.cxfspringbootws_CRUD.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Entity(name="user")
+@Entity(name="db_user")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

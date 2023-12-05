@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-@Entity(name = "profession")
+@Entity(name = "db_profession")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

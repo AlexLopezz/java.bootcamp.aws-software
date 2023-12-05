@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ar.alexdev</groupId>
-	<artifactId>cxf-springboot-ws_CRUD</artifactId>
+	<artifactId>cxf-springboot-cxf_CRUD</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>cxf-springboot-ws_CRUD</name>
+	<name>springboot_cxf_CRUD</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -24,9 +24,10 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-		 <dependency>
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
