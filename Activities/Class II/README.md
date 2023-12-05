@@ -20,5 +20,5 @@
 # Other way of how to run it?
 
 * Through IntelliJ graphic options. Here a small tutorial:
+https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/a0a67038-4d75-452f-87b2-b749cb57c7ee
 
-    
