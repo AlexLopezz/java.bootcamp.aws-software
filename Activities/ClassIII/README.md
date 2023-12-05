@@ -5,14 +5,15 @@
 
 * Must be directed the Java class that contains a main method inside it.
     * Sample:
-        * In this address: src/excercise1/Capicua
+        * In this address: src/excercise1/Demo
 
         * We have a main code block:
       ```
       public static void main(String[] args) {
-        IProgramable program = new TheProgram();
-        program.run();
-        }
+        IStackeable<String> myStack = new .......
+        ...................
+        ...................
+      }
       ```
 
     * Press Ctrl + Shift + F10 and it will run.
