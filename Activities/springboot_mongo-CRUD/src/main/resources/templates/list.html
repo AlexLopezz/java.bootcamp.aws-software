@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<div class="container text-center">
+    <h1 th:text="${title}"></h1>
+
+    <h3 th:if="${users.isEmpty()}">No registered users :(</h3>
+
+    <table th:if="${users.size > 0}" class="table table-hover">
+        <thead>
+        <tr class="col-header">
+            <th>DNI</th>
+            <th>Name</th>
+            <th>LastName</th>
+            <th>Date of Birth</th>
+            <th>Profession</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.dni}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${#dates.format(user.dateBirth, 'yyyy/MM/dd')}"></td>
+            <td th:text="${user.profession.name}"></td>
+            <td><a class="btn btn-warning" th:href="@{/user/form(dni=${user.dni})}">Edit</a></td>
+            <td><a class="btn btn-danger" th:href="@{/user/delete(dni=${user.dni})}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="m-2">
+        <a class="btn btn-primary" th:href="@{/user/form}">Add new Person</a>
+    </div>
+    <a th:href="@{/}">Home</a>
+</div>
+
+</body>
+</html>
