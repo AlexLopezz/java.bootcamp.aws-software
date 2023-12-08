@@ -8,6 +8,6 @@ import java.util.List;
 @Service
 public interface IProfessionService {
     List<Profession> getAll();
-
+    void save(Profession profession);
     void saveAll(List<Profession> professions);
 }

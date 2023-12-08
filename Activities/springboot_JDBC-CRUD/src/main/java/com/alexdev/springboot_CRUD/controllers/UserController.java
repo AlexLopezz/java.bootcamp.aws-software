@@ -35,16 +35,17 @@ public class UserController {
     }
 
     @GetMapping("/form")
-    public String formUser(@RequestParam(required = false) String dni, Model model){
+    public String formGetUserView(@RequestParam(required = false) String dni, Model model) {
         model.addAttribute("title", "Create user");
         model.addAttribute("user", new User());
 
         Optional.ofNullable(dni)
-                        .flatMap(d -> userService.getBy(d))
-                                .ifPresent(u -> {
-                                    model.addAttribute("title", "Update user");
-                                    model.addAttribute("user", u);
-                                });
+                .flatMap(d -> userService.getBy(d))
+                .ifPresent(u -> {
+                    model.addAttribute("edit",true);
+                    model.addAttribute("title", "Update user");
+                    model.addAttribute("user", u);
+                });
 
         return "form";
     }
@@ -59,7 +60,6 @@ public class UserController {
 
             return "form";
         }
-        user.setDni(user.getDni().replace(",", ""));
         Optional.of(user)
                 .ifPresent(u -> userService.save(u));
 
@@ -85,7 +85,8 @@ public class UserController {
     public List<Profession> getProfessions(){
         return professionService.getAll();
     }
-
+    @ModelAttribute(name = "edit")
+    public boolean editForm(){ return false; }
     @ModelAttribute(name = "errors")
     public Map<String, String> getErrors(){
         return new LinkedHashMap<>();

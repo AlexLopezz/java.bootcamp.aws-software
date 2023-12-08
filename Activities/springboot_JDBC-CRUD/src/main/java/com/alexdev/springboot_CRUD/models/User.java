@@ -34,6 +34,7 @@ public class User {
     private Date dateBirth;
 
     @ManyToOne(optional = false, cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @JoinColumn(name = "profession_fk")
     private Profession profession;
 
     @Override

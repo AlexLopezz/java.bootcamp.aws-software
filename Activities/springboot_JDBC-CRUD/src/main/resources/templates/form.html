@@ -9,18 +9,28 @@
         <div class="container text-center">
             <h1 class="d-inline bg-dark text-light" th:text="${title}"></h1>
             <div class="d-flex justify-content-center align-items-center m-2">
-                <form th:action="@{/user/form}" method="POST" th:object="${user}" class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
-                    <div th:if="${user.dni == null || !errors.isEmpty()}" class="m-2">
-                        <div>
-                            <label>DNI</label>
-                        </div>
-                        <div>
-                            <input class="text-center" type="text" th:field="*{dni}" placeholder="sample: 43542654"/>
-                            <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="color:red;"></div>
-                        </div>
-                    </div>
-                    <div th:if="${user.dni != null}">
+
+                <form th:object="${user}" th:action="@{/user/form}" method="POST"  class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
+                    <div th:if="${edit}">
                         <input hidden th:field="*{dni}">
+                    </div>
+                    <div th:if="${!edit}" class="m-2">
+                        <div>
+                            <label for="dni">DNI</label>
+                        </div>
+                        <div>
+                            <input
+                                    class="text-center"
+                                    type="text"
+                                    th:field="*{dni}"
+                                    id="dni"
+                                    placeholder="43546765"
+                            >
+                            <!-- Error -->
+                            <div th:if="${errors != null && errors.containsKey('dni')}" style="color:red;">
+                                <p th:text="${errors.get('dni')}"></p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="m-2">
@@ -36,28 +46,34 @@
 
                     <div class="m-2">
                         <div>
-                            <label>Last Name</label>
+                            <label for="lastName">Last Name</label>
                         </div>
                         <div>
-                            <input class="text-center" type="text" th:field="*{lastName}" placeholder="Gates" />
+                            <input id="lastName" class="text-center" type="text" th:field="*{lastName}" placeholder="Gates" />
                             <!-- Error -->
                             <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></div>
                         </div>
                     </div>
 
                     <div class="m-2">
-                        <label>Date of Birth</label>
-                        <input class="text-center" type="date" th:field="*{dateBirth}" />
+                        <label for="dateBirth">Date of Birth</label>
+                        <input id="dateBirth" class="text-center" type="date" th:field="*{dateBirth}" />
                         <!-- Error -->
                         <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" style="color:red;"></div>
                     </div>
 
                     <div class="m-2">
-                        <label>Profession</label>
-                            <select th:field="*{profession}" class="text-center">
-                                <option th:each="prof : ${professions}" th:value="${prof.id}" th:text="${prof.name}"></option>
-                            </select>
+                        <label for="profession">Profession:</label>
+                        <select id="profession" name="profession" th:field="*{profession.id}">
+                            <option th:each="profesion : ${professions}" th:value="${profesion.id}" th:text="${profesion.name}"></option>
+                        </select>
+                        <!-- <label for="profession">Profession</label>
+                        <select id="profession" th:field="*{profession}" class="text-center" name="profession">
+                            <option value="#" disabled selected>--- Select An Option ---</option>
+                            <option th:each="prof : ${professions}" th:value="${prof}" th:text="${prof.name}"></option>
+                        </select> -->
                     </div>
+
 
                     <div class="m-2">
                         <button class="btn btn-primary">Save Changes</button>

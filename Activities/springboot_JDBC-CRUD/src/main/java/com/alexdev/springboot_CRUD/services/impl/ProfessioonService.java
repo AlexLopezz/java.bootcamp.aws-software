@@ -22,4 +22,9 @@ public class ProfessioonService implements IProfessionService {
     public List<Profession> getAll() {
         return professionRepository.findAll();
     }
+
+    @Override
+    public void save(Profession profession) {
+        professionRepository.save(profession);
+    }
 }

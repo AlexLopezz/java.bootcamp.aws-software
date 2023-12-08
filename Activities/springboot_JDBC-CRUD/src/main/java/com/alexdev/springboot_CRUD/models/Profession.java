@@ -5,7 +5,6 @@ import lombok.*;
 
 @Entity(name = "db_profession")
 @Getter @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -16,7 +15,4 @@ public class Profession {
 
     @Column(nullable = false, length = 80)
     private String name;
-
-    @Column(length = 150)
-    private String description;
 }

@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface IUserService {
     List<User> getAll();
     Optional<User> getBy(String DNI);
-    User save(User u);
+    void save(User u);
     void deleteBy(String DNI);
 }

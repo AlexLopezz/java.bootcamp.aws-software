@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface IUserRepository {
     List<User> findAll();
-    User save(User user);
+    void save(User user);
     Optional<User> findByDNI(String DNI);
     void deleteByDNI(String DNI);
 }

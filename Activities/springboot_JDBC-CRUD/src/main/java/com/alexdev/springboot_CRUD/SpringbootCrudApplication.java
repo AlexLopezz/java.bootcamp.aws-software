@@ -3,10 +3,12 @@ package com.alexdev.springboot_CRUD;
 import com.alexdev.springboot_CRUD.models.Profession;
 import com.alexdev.springboot_CRUD.services.IProfessionService;
 import com.alexdev.springboot_CRUD.services.IUserService;
+import com.alexdev.springboot_CRUD.utils.JDBCQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class SpringbootCrudApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		/*Add records for Entity Professions before starter SpringApp:
+		//Add records for Entity Professions before starter SpringApp:
 		List<Profession> professions = List
 				.of(
 						Profession.builder().name("Backend Developer").build(),
@@ -30,6 +32,6 @@ public class SpringbootCrudApplication implements CommandLineRunner {
 						Profession.builder().name("QA Developer").build()
 				);
 
-		profService.saveAll(professions); */
+		profService.saveAll(professions);
 	}
 }
