@@ -2,15 +2,16 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml" lang="es">
     <head>
         <meta charset="UTF-8">
+        <link rel="icon" th:href="@{/images/favicons/user.ico}" type="image/x-icon">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <title>User managment</title>
+        <title th:text="${title}"></title>
     </head>
-    <body>
+    <body style="background-color: #6DD3FF;">
         <div class="container text-center">
             <h1 class="d-inline bg-dark text-light" th:text="${title}"></h1>
             <div class="d-flex justify-content-center align-items-center m-2">
 
-                <form th:object="${user}" th:action="@{/user/form}" method="POST"  class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
+                <form th:object="${form}" th:action="@{/user/form}" method="POST"  class="p-2 w-50 rounded" style="background-color: #DEDEDE;">
                     <div th:if="${edit}">
                         <input hidden th:field="*{dni}">
                     </div>
@@ -26,10 +27,7 @@
                                     id="dni"
                                     placeholder="43546765"
                             >
-                            <!-- Error -->
-                            <div th:if="${errors != null && errors.containsKey('dni')}" style="color:red;">
-                                <p th:text="${errors.get('dni')}"></p>
-                            </div>
+                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{dni}" style="color:red;"></div>
                         </div>
                     </div>
 
@@ -64,16 +62,10 @@
 
                     <div class="m-2">
                         <label for="profession">Profession:</label>
-                        <select id="profession" name="profession" th:field="*{profession.id}">
+                        <select id="profession" name="profession" th:field="*{profession}">
                             <option th:each="profesion : ${professions}" th:value="${profesion.id}" th:text="${profesion.name}"></option>
                         </select>
-                        <!-- <label for="profession">Profession</label>
-                        <select id="profession" th:field="*{profession}" class="text-center" name="profession">
-                            <option value="#" disabled selected>--- Select An Option ---</option>
-                            <option th:each="prof : ${professions}" th:value="${prof}" th:text="${prof.name}"></option>
-                        </select> -->
                     </div>
-
 
                     <div class="m-2">
                         <button class="btn btn-primary">Save Changes</button>

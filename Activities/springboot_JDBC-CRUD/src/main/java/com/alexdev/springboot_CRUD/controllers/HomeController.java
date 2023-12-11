@@ -11,7 +11,7 @@ public class HomeController {
     @GetMapping
     public String helloView(Model model){
         model.addAttribute("headerPage", "Home Page");
-        model.addAttribute("title", "Hello World!");
+        model.addAttribute("title", "Welcome to my SpringBoot App JDBC CRUD!");
 
         return "index";
     }

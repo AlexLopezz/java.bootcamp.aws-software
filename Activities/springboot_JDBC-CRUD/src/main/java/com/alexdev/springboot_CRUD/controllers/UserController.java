@@ -1,5 +1,7 @@
 package com.alexdev.springboot_CRUD.controllers;
 
+import com.alexdev.springboot_CRUD.mapper.MapperFormUser;
+import com.alexdev.springboot_CRUD.models.Form;
 import com.alexdev.springboot_CRUD.models.User;
 import com.alexdev.springboot_CRUD.models.Profession;
 import com.alexdev.springboot_CRUD.services.IProfessionService;
@@ -21,6 +23,8 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
+    MapperFormUser mapperFormUser;
+    @Autowired
     IUserService userService;
 
     @Autowired
@@ -37,32 +41,31 @@ public class UserController {
     @GetMapping("/form")
     public String formGetUserView(@RequestParam(required = false) String dni, Model model) {
         model.addAttribute("title", "Create user");
-        model.addAttribute("user", new User());
+        model.addAttribute("form", new Form());
 
         Optional.ofNullable(dni)
                 .flatMap(d -> userService.getBy(d))
                 .ifPresent(u -> {
-                    model.addAttribute("edit",true);
                     model.addAttribute("title", "Update user");
-                    model.addAttribute("user", u);
+                    model.addAttribute("form", mapperFormUser.userToForm(u));
+                    model.addAttribute("edit",true);
                 });
 
         return "form";
     }
 
     @PostMapping("/form")
-    public String postFormUser(@Valid User user, BindingResult validations, Model model){
+    public String postFormUser(@Valid Form form, BindingResult validations,Model model){
         if(validations.hasErrors()){
             model.addAttribute("title", "Error! Check values");
-
             Map<String, String> errors = Validations.getErrors(validations.getFieldErrors());
             model.addAttribute("errors", errors);
 
             return "form";
         }
-        Optional.of(user)
-                .ifPresent(u -> userService.save(u));
 
+        Optional.of(form)
+                .ifPresent(f -> userService.save(mapperFormUser.formToUser(f)));
 
         return "redirect:/user";
     }

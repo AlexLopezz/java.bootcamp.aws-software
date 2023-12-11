@@ -7,35 +7,27 @@ import jakarta.validation.constraints.Past;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Entity(name = "db_user")
-@Builder
-@ToString
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    @Id
+@Builder
+public class Form {
+    @NotEmpty(message = "Must be a valid value.")
     private String dni;
 
+    @NotEmpty(message = "Must be a valid value.")
     private String name;
 
+    @NotEmpty(message = "Must be a valid value.")
     private String lastName;
 
-    @Temporal(TemporalType.DATE)
+    @NotNull(message = "Must be choose a correct date.")
+    @Past(message = "Must be after current date.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBirth;
 
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
-    @JoinColumn(name = "profession_fk")
-    private Profession profession;
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof User u)
-            return this.getDni().equals(u.getDni());
-
-        return false;
-    }
+    @NotNull(message = "Must be a valid value.")
+    private Long profession;
 }
