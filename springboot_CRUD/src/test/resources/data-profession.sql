@@ -1,0 +1,1 @@
+INSERT INTO db_profession (name) VALUES ('Desarrollador');
