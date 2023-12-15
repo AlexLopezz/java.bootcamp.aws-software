@@ -1,4 +1,4 @@
-# Welcome to my ClassII Project!
+# Welcome to my ClassIV Project!
 **This project consists of performing basic Java tasks, which allow us to practice coding and improve our programming logic. They are sent by Professor Andres Alberto Ramos, who himself is teaching us in a Bootcamp.**
 
 # Techonologies used: 
