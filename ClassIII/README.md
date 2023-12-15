@@ -1,24 +1,8 @@
-# How to run it?
-* Necessary Technologies:
-    * JDK / OpenJDK (prefered 17)
-    * IntelliJ Community / Ultimate
+# Welcome to my ClassIII Project!
+**This project consists of performing basic Java tasks, which allow us to practice coding and improve our programming logic. They are sent by Professor Andres Alberto Ramos, who himself is teaching us in a Bootcamp.**
 
-* Must be directed the Java class that contains a main method inside it.
-    * Sample:
-        * In this address: src/excercise1/Demo
+# Techonologies used: 
+  * JDK / OpenJDK (prefered 17)
+  * IntelliJ Community Edition
 
-        * We have a main code block:
-      ```
-      public static void main(String[] args) {
-        IStackeable<String> myStack = new .......
-        ...................
-        ...................
-      }
-      ```
-
-    * Press Ctrl + Shift + F10 and it will run.
-
-# Other way of how to run it?
-
-* Through IntelliJ graphic options. Here a small tutorial:
-* ## 
+# Each package has a README.md file that explains how to run it. If you want to run a specific one, you must follow the steps in that file. It is necessary to have the technologies used for it to work correctly.
