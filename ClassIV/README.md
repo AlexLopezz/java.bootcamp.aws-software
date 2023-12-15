@@ -5,4 +5,7 @@
   * JDK / OpenJDK (prefered 17)
   * IntelliJ Community Edition
 
-# Each package has a README.md file that explains how to run it. If you want to run a specific one, you must follow the steps in that file. It is necessary to have the technologies used for it to work correctly.
+# How to run it?
+Each package has a Java class called "Demo", this class will allow us to run and verify the operation of the program.**You must go to a particular package and then run it with Ctrl + Shift + F10.**
+## We can also run it with the graphical options offered by IntelliJ:  
+![image](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/2d333d39-7cc8-4fa0-97e8-1732f2fb34fb)
