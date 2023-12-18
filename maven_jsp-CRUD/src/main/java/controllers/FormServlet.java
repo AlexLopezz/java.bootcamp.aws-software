@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lombok.SneakyThrows;
 import models.User;
 import models.enums.PROFESSION;
 import services.IUserService;
@@ -26,35 +25,31 @@ public class FormServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<String> dniUser = Optional.ofNullable(req.getParameter("dni"));
-        dniUser.ifPresent(u -> {
-            Optional<User> userDB = userService.getBy(u);
-            userDB.ifPresent(user -> req.setAttribute("user", user));
-        });
+        req.setAttribute("headerPage", "User form");
+        req.setAttribute("title", "Create user");
         req.setAttribute("professions", PROFESSION.values());
-        req.setAttribute("title", "User management");
+
+        Optional.ofNullable(req.getParameter("dni"))
+                .flatMap(userService::getBy)
+                .ifPresent(u -> {
+                    req.setAttribute("user", u);
+                    req.setAttribute("title", "Update user");
+                });
+
         getServletContext().getRequestDispatcher("/formUser.jsp").forward(req, resp);
     }
 
-    @SneakyThrows
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        User userToSave = User.builder()
+                .dni(req.getParameter("dni"))
+                .name(req.getParameter("name"))
+                .lastName(req.getParameter("lastName"))
+                .dateBirth(LocalDate.parse(req.getParameter("dateBirth")))
+                .profession(PROFESSION.valueOf(req.getParameter("profession")))
+                .build();
 
-        String name = req.getParameter("name");
-        String lastName = req.getParameter("lastName");
-        String dni = req.getParameter("dni");
-        LocalDate dateBirth = LocalDate.parse(req.getParameter("dateBirth"));
-        PROFESSION profession = PROFESSION.valueOf(req.getParameter("profession"));
-
-        userService.save(User.builder()
-                            .dni(dni)
-                            .name(name)
-                            .lastName(lastName)
-                            .dateBirth(dateBirth)
-                            .profession(profession)
-                        .build()
-        );
-
+        userService.save(userToSave);
         resp.sendRedirect(req.getContextPath().concat("/list"));
     }
 }

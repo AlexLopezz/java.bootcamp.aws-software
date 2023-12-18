@@ -21,9 +21,9 @@ public class Connection implements IConnectable{
 
     private void initPath(){
         if (System.getProperty("os.name").equals("Linux")) {
-            this.PATH = "/home/alexdev/Documents/BootcampAWSoftware/Activities/maven_CRUD/src/main/java/database/myDB.txt";
+            this.PATH = "/home/alexdev/Documents/BootcampAWSoftware/maven_jsp-CRUD/src/main/java/database/myDB.txt";
         } else {
-            this.PATH = "C:\\Users\\Alex\\Documents\\BootcampAWSoftware\\Activities\\maven_CRUD\\src\\main\\java\\database\\myDB.txt";
+            this.PATH = "C:\\Users\\Alex\\Documents\\BootcampAWSoftware\\maven_jsp-CRUD\\src\\main\\java\\database\\myDB.txt";
         }
     }
 
@@ -33,24 +33,30 @@ public class Connection implements IConnectable{
     }
 
     @Override
-    public List<String> getDataSource() throws IOException {
-        List<String> datasource = new LinkedList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH))) {
-            String line;
-            while ((line = br.readLine()) != null)
-                datasource.add(line);
-        }
+    public List<String> getDataSource()  {
+        try {
+            List<String> datasource = new LinkedList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(PATH))) {
+                String line;
+                while ((line = br.readLine()) != null)
+                    datasource.add(line);
+            }
 
-        return datasource;
+            return datasource;
+        }catch (IOException ig){
+            throw new RuntimeException(ig.getMessage());
+        }
     }
 
     @Override
-    public void refresh(List<String> datasource) throws IOException {
+    public void refresh(List<String> datasource) {
         try(FileWriter fl = new FileWriter(PATH, false);
             PrintWriter pw = new PrintWriter(fl)){
 
             for (String data : datasource)
                 pw.println(data);
+        }catch (IOException ig){
+            throw new RuntimeException(ig.getMessage());
         }
     }
 }

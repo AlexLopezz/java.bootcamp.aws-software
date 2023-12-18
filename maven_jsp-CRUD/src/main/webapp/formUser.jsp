@@ -2,7 +2,7 @@
 <%@ taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:include page="layout/header.jsp" />
-            <h1 class="d-inline bg-dark text-light">Register / Update Person</h1>
+            <h1 class="d-inline bg-dark text-light">${title}</h1>
             <div class="d-flex justify-content-center align-items-center m-2">
                 <form class="p-2 w-50 rounded" style="background-color: #DEDEDE;" action="${pageContext.request.contextPath}/form" method="POST">
                     <jstl:choose>
@@ -16,7 +16,7 @@
                                             class="text-center"
                                             type="text"
                                             name="dni"
-                                            placeholder="11222333">
+                                            placeholder="34465765">
                                 </div>
                             </div>
                         </jstl:when>
@@ -68,9 +68,8 @@
                     <div class="m-2">
                         <label>Profession</label>
                         <select class="text-center" name="profession">
-                            <option value="#" disabled selected>--- Select An Option ---</option>
                             <jstl:forEach items="${professions}" var="prof">
-                                <option value="${prof}" ${prof == user.profession ? "selected" : ""} >${prof}</option>
+                                <option value="${prof}" ${prof == user.profession ? "selected" : ""} >${prof.getValue()}</option>
                             </jstl:forEach>
                         </select>
                     </div>

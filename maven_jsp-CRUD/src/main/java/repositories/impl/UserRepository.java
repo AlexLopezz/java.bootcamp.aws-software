@@ -2,8 +2,6 @@ package repositories.impl;
 
 import database.conf.Connection;
 import database.conf.IConnectable;
-import exceptions.DAOException;
-import exceptions.NotFoundException;
 import models.User;
 import models.enums.PROFESSION;
 import repositories.IUserRepository;
@@ -16,68 +14,53 @@ import java.util.stream.IntStream;
 
 public class UserRepository implements IUserRepository{
     private final IConnectable conn;
-    private final List<User> userCache;
-
+    private final List<User> usersCache;
     public UserRepository() throws IOException {
         conn = new Connection();
-        userCache = new LinkedList<>();
+        usersCache = new LinkedList<>();
+        getAll();
     }
 
     @Override
-    public List<User> getAll() throws DAOException {
-        try {
-            userCache.clear(); //Empty Cache, because we must add again...
-            //Adding users that find into file DB:
-            if (!conn.getDataSource().isEmpty()) {
-                for (String data : conn.getDataSource()) {
-                    userCache.add(castToUser(data));
-                }
+    public List<User> getAll() {
+        usersCache.clear();
+        if (!conn.getDataSource().isEmpty()) {
+            for (String data : conn.getDataSource()) {
+                usersCache.add(castToUser(data));
             }
-
-            return userCache;
-        }catch (IOException e){
-            throw new DAOException("There was an error when try list of users...");
         }
+
+        return usersCache;
     }
 
     @Override
-    public void save(User user) throws IOException {
-        //Check if exist user:
-        if (userCache.contains(user)) {
-            int indexUserToReplace = userIndexList(user);
-            userCache.set(indexUserToReplace, user); //Replace user by array index
+    public void save(User user){
+        if (usersCache.contains(user)) {
+            int indexUserToReplace = userIndexList(user, usersCache);
+            usersCache.set(indexUserToReplace, user);
 
         } else
-            userCache.add(user); //Only add, if not exist user...
+            usersCache.add(user);
 
-        conn.refresh(castToDataSource(userCache));
-    }
-
-
-    @Override
-    public void deleteBy(String DNI) throws IOException {
-            //Check if exist user:
-            getBy(DNI).ifPresent(userCache::remove);
-            conn.refresh(castToDataSource(userCache)); //Refresh file db
+        conn.refresh(castToDataSource(usersCache));
     }
 
     @Override
-    public Optional<User> getBy(String DNI){
-        return userCache.stream()
-                    .filter(u -> u.getDni().equals(DNI)) //Filter by DNI
+    public void deleteBy(String DNI) {
+        getBy(DNI).ifPresent(usersCache::remove);
+        conn.refresh(castToDataSource(usersCache));
+    }
+
+    @Override
+    public Optional<User> getBy(String DNI) {
+        return usersCache.stream()
+                    .filter(u -> u.getDni().equals(DNI))
                     .findFirst();
     }
 
-    //UTILS
+
     private User castToUser(String dataRow){
-        String[] fields = dataRow.split(";");
-        return User.builder()
-                    .dni(fields[0])
-                    .name(fields[1])
-                    .lastName(fields[2])
-                    .dateBirth(LocalDate.parse(fields[3]))
-                    .profession(PROFESSION.valueOf(fields[4]))
-                .build();
+        return convertToUser.apply(dataRow.split(";"));
     }
     private List<String> castToDataSource(List<User> users){
         return users.stream()
@@ -85,11 +68,11 @@ public class UserRepository implements IUserRepository{
                 .toList();
     }
     private static final Function<User, String> convertToString = User::toString;
-    private int userIndexList(User user){
-        return IntStream.range(0, userCache.size())
-                .filter(i -> Objects.equals(userCache.get(i), user))
+    private static final Function<String[], User> convertToUser = (f) -> new User(f[0], f[1], f[2], LocalDate.parse(f[3]), PROFESSION.valueOf(f[4]));
+    private int userIndexList(User user, List<User> users){
+        return IntStream.range(0, users.size())
+                .filter(i -> Objects.equals(users.get(i), user))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElse(-1);
     }
-
 }

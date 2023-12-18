@@ -1,6 +1,5 @@
 package controllers;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,16 +19,9 @@ public class DeleteUserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Optional<String> dni = Optional.ofNullable(req.getParameter("dni"));
-        dni.ifPresent(d -> {
-            try {
-                userService.deleteBy(d);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
+        dni.ifPresent(userService::deleteBy);
 
         resp.sendRedirect(req.getContextPath().concat("/list"));
     }

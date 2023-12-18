@@ -1,8 +1,6 @@
 package models;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import models.enums.PROFESSION;
 
 import java.text.SimpleDateFormat;
@@ -10,6 +8,8 @@ import java.time.LocalDate;
 import java.util.Date;
 @Builder
 @Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private String dni;
     private String name;

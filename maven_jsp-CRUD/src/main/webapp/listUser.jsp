@@ -9,7 +9,7 @@
             <h1>${title}</h1>
             <jstl:choose>
                 <jstl:when test="${not empty users || users.size() > 0}">
-                    <table class="table table-hover">
+                    <table class="m-2 table table-light table-hover">
                         <thead>
                             <tr class="col-header">
                                 <th>DNI</th>
@@ -28,7 +28,7 @@
                                     <td>${user.name}</td>
                                     <td>${user.lastName}</td>
                                     <td>${user.dateBirth}</td>
-                                    <td>${user.profession}</td>
+                                    <td>${user.profession.getValue()}</td>
                                     <td><a class="btn btn-warning" href="${pageContext.request.contextPath}/form?dni=${user.dni}">Edit</a></td>
                                     <td><a class="btn btn-danger" href="${pageContext.request.contextPath}/deleteUser?dni=${user.dni}">Delete</a></td>
                                 </tr>
