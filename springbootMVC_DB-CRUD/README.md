@@ -21,7 +21,7 @@
 
  [Connect mariadb - dbeaverCE.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/b5856fcb-4337-47c3-897e-10f65cda9a31)
 
- [Create a new database mariadb - dbeaver.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/b974b4ff-bfca-46e6-b610-5a46cea91e6e)
+ [Create a new database mariadb - dbeaver.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/0455feec-08b2-429d-8f22-79cc3cd7e4aa)
 
 ### Run project on IntelliJ 
 * Terminal:
