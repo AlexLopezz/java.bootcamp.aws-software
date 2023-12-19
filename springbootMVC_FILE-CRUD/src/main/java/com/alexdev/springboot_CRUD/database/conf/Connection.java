@@ -22,9 +22,10 @@ public class Connection implements IConnectable{
     }
 
     private void initPath(){
-        switch (System.getProperty("os.name")){
-            case "Windows 10" -> this.PATH= this.PATH.concat("\\src\\main\\java\\com\\alexdev\\springboot_CRUD\\database\\myDB.txt");
-            case "Linux"   -> this.PATH= this.PATH.concat("/src/main/java/com/alexdev/springboot_CRUD/database/myDB.txt");
+        if (System.getProperty("os.name").equals("Linux")) {
+            this.PATH = this.PATH.concat("/src/main/java/com/alexdev/springboot_CRUD/database/myDB.txt");
+        } else {
+            this.PATH = this.PATH.concat("\\src\\main\\java\\com\\alexdev\\springboot_CRUD\\database\\myDB.txt");
         }
     }
     private void createFile() throws IOException {
