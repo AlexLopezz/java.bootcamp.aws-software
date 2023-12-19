@@ -8,5 +8,3 @@
  * Tomcat 8.5
  * Servlet 3.1
  * JSTL 2.1
-
-## How to run it?
