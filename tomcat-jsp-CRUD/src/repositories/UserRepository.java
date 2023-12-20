@@ -17,13 +17,13 @@ public class UserRepository implements IUserRepository{
     public UserRepository() throws IOException {
         conn = new Connection();
         userCache = new LinkedList<>();
+        getAll();
     }
 
     @Override
-    public List<User> getAll() throws IOException {
-        userCache.clear(); //Empty Cache, because we must add again...
+    public List<User> getAll() {
+        userCache.clear();
 
-        //Adding users that find into file DB:
         if (!conn.getDataSource().isEmpty()) {
             for (String data : conn.getDataSource()) {
                 userCache.add(castToUser(data));
@@ -34,52 +34,48 @@ public class UserRepository implements IUserRepository{
     }
 
     @Override
-    public void save(User user) throws IOException {
-        //Check if exist user:
+    public void save(User user) {
         if(userCache.contains(user)){
             for(int i = 0; i < userCache.size(); i++){
                 if(userCache.get(i).getDni().equals(user.getDni())) {
-                    userCache.set(i, user); //Replace user by array index
+                    userCache.set(i, user);
                     break;
                 }
             }
         }else
-            userCache.add(user); //Only add, if not exist user...
+            userCache.add(user);
 
         conn.refresh(castToDataSource(userCache));
     }
 
     @Override
-    public void deleteBy(String DNI) throws IOException {
-        //Check if exist user:
-        Optional<User> user = getBy(DNI);
-        user.ifPresent(userCache::remove); //Only delete if exist user...
-
-        conn.refresh(castToDataSource(userCache)); //Refresh file db
+    public void deleteBy(String DNI) {
+        getBy(DNI).ifPresent(userCache::remove);
+        conn.refresh(castToDataSource(userCache));
     }
 
     @Override
     public Optional<User> getBy(String DNI){
         return userCache.stream()
-                .filter(u -> u.getDni().equals(DNI)) //Filter by DNI
-                .findFirst(); //Warning... if not present, return optional empty
+                .filter(u -> u.getDni().equals(DNI))
+                .findFirst();
     }
 
-    //UTILS
     private User castToUser(String dataRow){
-        String[] fields = dataRow.split(";");
-        return new User(
-                fields[0],
-                fields[1],
-                fields[2],
-                LocalDate.parse(fields[3]),
-                PROFESSION.valueOf(fields[4])
-        );
+        return convertToUser.apply(dataRow.split(";"));
     }
     private List<String> castToDataSource(List<User> users){
         return users.stream()
                 .map(convertToString)
                 .toList();
     }
+
+    private static final Function<String[], User> convertToUser = (f) -> new User(
+            f[0],
+            f[1],
+            f[2],
+            LocalDate.parse(f[3]),
+            PROFESSION.valueOf(f[4])
+    );
     private static final Function<User, String> convertToString = User::toString;
 }

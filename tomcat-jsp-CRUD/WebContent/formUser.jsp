@@ -2,7 +2,7 @@
 <%@ taglib prefix="jstl" uri="jakarta.tags.core" %>
 
 <jsp:include page="layout/header.jsp" />
-    <h1>Register / Update Person</h1>
+    <h1>${title}</h1>
     <form class="center" action="${pageContext.request.contextPath}/form" method="POST">
         <div class="field">
             <div>

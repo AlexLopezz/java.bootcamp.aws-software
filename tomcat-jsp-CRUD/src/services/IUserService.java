@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
-    List<User> getAll() throws IOException;
-    void save(User u) throws IOException;
-    void deleteBy(String DNI) throws IOException;
-    Optional<User> getBy(String DNI) throws IOException;
+    List<User> getAll();
+    void save(User u);
+    void deleteBy(String DNI);
+    Optional<User> getBy(String DNI);
 }

@@ -16,22 +16,22 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public List<User> getAll() throws IOException {
+    public List<User> getAll(){
         return userRepository.getAll();
     }
 
     @Override
-    public void save(User u) throws IOException {
+    public void save(User u){
         userRepository.save(u);
     }
 
     @Override
-    public void deleteBy(String DNI) throws IOException {
+    public void deleteBy(String DNI){
         userRepository.deleteBy(DNI);
     }
 
     @Override
-    public Optional<User> getBy(String DNI) throws IOException {
+    public Optional<User> getBy(String DNI) {
         return userRepository.getBy(DNI);
     }
 }

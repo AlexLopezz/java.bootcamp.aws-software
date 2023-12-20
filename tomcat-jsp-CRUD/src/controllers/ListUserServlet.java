@@ -22,11 +22,13 @@ public class ListUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String titleAndHeader = "List of Users!";
+        req.setAttribute("headerPage", titleAndHeader);
+        req.setAttribute("title", titleAndHeader);
+
         Optional.ofNullable(userService.getAll())
                 .ifPresent(users -> req.setAttribute("users", users));
 
-        req.setAttribute("title", "Welcome - List of Users!"); //Title of head html.
-
-        getServletContext().getRequestDispatcher("/listUser.jsp").forward(req, resp); //dispatch to view
+        getServletContext().getRequestDispatcher("/listUser.jsp").forward(req, resp);
     }
 }

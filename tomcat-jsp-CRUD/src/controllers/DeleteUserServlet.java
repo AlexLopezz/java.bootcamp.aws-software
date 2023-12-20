@@ -22,23 +22,8 @@ public class DeleteUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<String> dni = Optional.ofNullable(req.getParameter("dni")); //We wrap the DNI parameter
-
-        dni.ifPresent(d -> { //if the value is found
-            try {
-
-                userService.getBy(d).ifPresent(u -> { //if the value found is from anything user... then
-                    try {
-                        userService.deleteBy(u.getDni()); //delete by means your dni
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        String dni = req.getParameter("dni");
+        Optional.ofNullable(dni).ifPresent(userService::deleteBy);
 
         resp.sendRedirect(req.getContextPath().concat("/list")); //redirect to /list(controller)...
     }

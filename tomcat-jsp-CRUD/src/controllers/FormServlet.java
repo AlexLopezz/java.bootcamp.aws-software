@@ -26,18 +26,18 @@ public class FormServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<String> dniUser = Optional.ofNullable(req.getParameter("dni"));
-        dniUser.ifPresent(u -> {
-            try {
-                Optional<User> userDB = userService.getBy(u);
-                userDB.ifPresent(user -> req.setAttribute("user", user));
+        req.setAttribute("headerPage", "User Form");
+        req.setAttribute("title", "Create user");
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        String dni = req.getParameter("dni");
+        Optional.ofNullable(dni)
+                .flatMap(userService::getBy)
+                .ifPresent(u -> {
+                    req.setAttribute("user", u);
+                    req.setAttribute("title", "Update user");
+                });
+
         req.setAttribute("professions", PROFESSION.values());
-        req.setAttribute("title", "User management");
         getServletContext().getRequestDispatcher("/formUser.jsp").forward(req, resp);
     }
 
@@ -50,8 +50,6 @@ public class FormServlet extends HttpServlet {
         PROFESSION profession = PROFESSION.valueOf(req.getParameter("profession"));
 
         userService.save(new User(dni, name, lastName, dateBirth, profession));
-
-
 
         resp.sendRedirect(req.getContextPath().concat("/list"));
     }
