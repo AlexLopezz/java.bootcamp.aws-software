@@ -25,3 +25,4 @@
 
 #### After running the project, you must go to the browser and type the following link: http://localhost:8080
 ###### Done!!!
+![image](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/f204d837-4e7e-4359-9b49-cea5201ab29f)
