@@ -12,10 +12,7 @@
 
 # How to run it?
 ### Docker - MongoDB
-* Open a new terminal and exec this command: ``` docker run -d -p 27017:27017 --name mongodb mongodb:4.2 ```
-
-### NoSQLBooster: Follow this steps
-[mongoDBtutorial.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/0a281f56-30c0-46f2-b731-bcd496e3de61)
+* ``` docker run -d -e MONGO_INITDB_DATABASE=mongoCRUD -p 27017:27017 --name mongoDB mongo:4.2 ```
 
 ### InteliiJ - Run project
 ###### Terminal 
