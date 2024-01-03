@@ -1,8 +1,8 @@
-package com.ar.alexdev.cxfspringbootws_CRUD.services.impl;
+package com.ar.alexdev.cxfspringbootrs_CRUD.services.impl;
 
-import com.ar.alexdev.cxfspringbootws_CRUD.models.User;
-import com.ar.alexdev.cxfspringbootws_CRUD.repositories.UserRepository;
-import com.ar.alexdev.cxfspringbootws_CRUD.services.UserServices;
+import com.ar.alexdev.cxfspringbootrs_CRUD.models.User;
+import com.ar.alexdev.cxfspringbootrs_CRUD.repositories.UserRepository;
+import com.ar.alexdev.cxfspringbootrs_CRUD.services.UserServices;
 import jakarta.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
-package com.ar.alexdev.cxfspringbootws_CRUD.services;
+package com.ar.alexdev.cxfspringbootrs_CRUD.services;
 
-import com.ar.alexdev.cxfspringbootws_CRUD.models.User;
+import com.ar.alexdev.cxfspringbootrs_CRUD.models.User;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;

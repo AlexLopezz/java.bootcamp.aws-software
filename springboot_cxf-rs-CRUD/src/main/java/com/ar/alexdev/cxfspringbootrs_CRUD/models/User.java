@@ -1,4 +1,4 @@
-package com.ar.alexdev.cxfspringbootws_CRUD.models;
+package com.ar.alexdev.cxfspringbootrs_CRUD.models;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,7 @@
-package com.ar.alexdev.cxfspringbootws_CRUD;
+package com.ar.alexdev.cxfspringbootrs_CRUD;
 
-import com.ar.alexdev.cxfspringbootws_CRUD.models.Profession;
-import com.ar.alexdev.cxfspringbootws_CRUD.repositories.ProfessionRepository;
+import com.ar.alexdev.cxfspringbootrs_CRUD.models.Profession;
+import com.ar.alexdev.cxfspringbootrs_CRUD.repositories.ProfessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
