@@ -13,12 +13,7 @@
  
 ### How to run it?
 ## Docker
-  * Open a new terminal and exec this command: ``` docker run -d --rm --name mariadb -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 mariadb ```
-## Dbeaver
-  #### Follow this steps:
-[291700137-b5856fcb-4337-47c3-897e-10f65cda9a31.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/94bb3e77-ddd7-4cf4-9370-457f8d5a4a86)
-
-[Create a new database mariadb - dbeaver.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/ff76ee07-13c1-4c4f-9374-ae01bd10ee10)
+  * Open a new terminal and exec this command: ``` docker run -d -p 3306:3306 -e MYSQL_DATABASE=jdbc -e MYSQL_ROOT_PASSWORD=root --rm --name mariadb mariadb:11.2 ```
 
 ## IntteliJ
  ### Terminal:

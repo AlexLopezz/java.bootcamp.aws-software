@@ -14,14 +14,7 @@
 # How to run it? 
 ### Docker - mariadb
 * Must create a new container from mariadb:11.2 w this command:
-``` docker run -d -p 3306:3306 --rm --name mariadb mariadb:11.2 ```
-
-### Dbeaver CE 
-* Follow these steps in the dbeaver app: 
-
- [Connect mariadb - dbeaverCE.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/b5856fcb-4337-47c3-897e-10f65cda9a31)
-
- [Create a new database mariadb - dbeaver.webm](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/0455feec-08b2-429d-8f22-79cc3cd7e4aa)
+``` docker run -d -p 3306:3306 -e MYSQL_DATABASE=myDB -e MYSQL_ROOT_PASSWORD=root --rm --name mariadb mariadb:11.2 ```
 
 ### Run project on IntelliJ 
 * Terminal:

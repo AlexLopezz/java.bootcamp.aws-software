@@ -18,4 +18,4 @@
 
 ### Run project on IntelliJ 
 * Terminal:
-  * Open a new terminal and exec this command: ``` mvn clean spring-boot:run ```git 
+  * Open a new terminal and exec this command: ``` mvn clean spring-boot:run ```

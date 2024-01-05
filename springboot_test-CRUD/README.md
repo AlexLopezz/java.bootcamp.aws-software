@@ -26,9 +26,6 @@
 ## Controller layer:  
 ![Screenshot from 2023-12-14 10-46-07](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/4a480522-16df-4d49-befc-bc4b0ce613d2)
 
-
-
-
 ## Service layer:
 ![Screenshot from 2023-12-14 10-47-03](https://github.com/AlexLopezz/BootcampAWSoftware/assets/90531107/677c8a44-6179-4217-931c-3eb5e8eaf6f0)
 
