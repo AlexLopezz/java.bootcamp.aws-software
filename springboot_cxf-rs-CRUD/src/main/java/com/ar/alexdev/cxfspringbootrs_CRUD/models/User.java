@@ -1,6 +1,7 @@
 package com.ar.alexdev.cxfspringbootrs_CRUD.models;
 
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,16 +14,13 @@ import java.util.Date;
 @Getter @Setter
 public class User {
     @Id
-    @Column(name = "dni")
-    private String DNI;
+    private String dni;
+
     private String name;
 
-    @Column(name = "last_name")
     private String lastName;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "date_birth")
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private Date dateBirth;
 
     @ManyToOne(
@@ -35,7 +33,7 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if(o instanceof User u)
-            return this.getDNI().equals(u.getDNI());
+            return this.getDni().equals(u.getDni());
 
 
         return false;
