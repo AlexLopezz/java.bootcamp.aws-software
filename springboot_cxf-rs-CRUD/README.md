@@ -38,9 +38,10 @@
 * In field *'profession'* you must put any of these values: ["Backend Developer", "Frontend Developer", "Fullstack Developer"]
 
 ### Demo (Postman) 
-[2024-01-04 20-56-12.mkv](..%2F..%2F..%2F..%2FVideos%2F2024-01-04%2020-56-12.mkv)
+[2024-01-04 20-56-12.webm](https://github.com/AlexLopezz/java.bootcamp.aws-software/assets/90531107/e7a7db3f-0f6b-4e68-b629-eb501228b7b9)
 
-### It is also possible to make queries by means of **CURL**
+
+### It is also possible to make queries via **CURL**
   * [GET] ``` curl --location 'http://localhost:8080/api/user' ```
   * [POST] ``` curl --location 'http://localhost:8080/api/user' \
     --header 'Content-Type: application/json' \
