@@ -1,5 +1,7 @@
 package com.ar.alexdev.cxfspringbootws_CRUD.services.impl;
 
+import com.ar.alexdev.cxfspringbootws_CRUD.mappers.UserMapper;
+import com.ar.alexdev.cxfspringbootws_CRUD.models.DTO.UserDTO;
 import com.ar.alexdev.cxfspringbootws_CRUD.models.User;
 import com.ar.alexdev.cxfspringbootws_CRUD.repositories.UserRepository;
 import com.ar.alexdev.cxfspringbootws_CRUD.services.UserServices;
@@ -7,44 +9,58 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServicesImpl implements UserServices {
+    private final UserRepository repository;
+    private final UserMapper userMapper;
+
     @Autowired
-    UserRepository repository;
-
-    @Override
-    public List<User> getAll() {
-        return repository.findAll();
+    public UserServicesImpl(UserRepository repository, UserMapper mapper) {
+        this.repository = repository;
+        this.userMapper = mapper;
     }
 
     @Override
-    public User deleteUser(String DNI) {
-        User usrToDelete = getUser(DNI);
-        repository.deleteById(DNI);
-
-        return usrToDelete;
+    public List<UserDTO> getAll() {
+        return repository.findAll()
+                .stream()
+                .map(userMapper::castToDTO).toList();
     }
 
     @Override
-    public User saveUser(User u) {
-        return repository.save(u);
+    public UserDTO updateUser(UserDTO u) {
+         Optional.ofNullable(u)
+                .flatMap(dto -> repository.findById(dto.getDni()))
+                .ifPresentOrElse(repository::save,
+                        () -> { throw new RuntimeException();});
+
+        return u;
     }
 
     @Override
-    public User updateUser(User u ) {
-        try {
-            User usrToUpdate = getUser(u.getDNI());
-            return repository.save(usrToUpdate);
+    public UserDTO getUser(String dni) {
+        return Optional.ofNullable(dni)
+                .flatMap(repository::findById)
+                .map(userMapper::castToDTO)
+                .orElseThrow();
+    }
+    @Override
+    public void deleteUser(String dni) {
+        User userFound = Optional.ofNullable(dni)
+                .flatMap(repository::findById)
+                .orElseThrow();
 
-        }catch (RuntimeException e){
-            throw new RuntimeException("User not exist into Database.");
-        }
+        repository.deleteById(userFound.getDni());
     }
 
     @Override
-    public User getUser(String DNI) {
-        return repository.findById(DNI)
+    public UserDTO saveUser(UserDTO user) {
+        return Optional.ofNullable(user)
+                .map(userMapper::castToPOJO)
+                .map(repository::save)
+                .map(userMapper::castToDTO)
                 .orElseThrow();
     }
 }

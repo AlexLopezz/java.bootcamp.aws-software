@@ -1,6 +1,6 @@
 package com.ar.alexdev.cxfspringbootws_CRUD.services;
 
-import com.ar.alexdev.cxfspringbootws_CRUD.models.User;
+import com.ar.alexdev.cxfspringbootws_CRUD.models.DTO.UserDTO;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -10,23 +10,22 @@ import java.util.List;
 
 @WebService
 public interface UserServices {
-    @WebMethod(operationName = "getUsers")
+    @WebMethod(operationName = "getAll")
     @WebResult(name = "users")
-    List<User> getAll();
+    List<UserDTO> getAll();
 
-    @WebMethod(operationName = "deleteUser")
-    @WebResult(name = "userDeleted")
-    User deleteUser(@WebParam(name = "dni") String dni);
+    @WebMethod(operationName = "delete")
+    void deleteUser(@WebParam(name = "dni") String dni);
 
-    @WebMethod(operationName = "saveUser")
-    @WebResult(name = "userSaved")
-    User saveUser(@WebParam(name = "user") User user);
+    @WebMethod(operationName = "save")
+    @WebResult(name = "saved")
+    UserDTO saveUser(@WebParam(name="userDTO") UserDTO user);
 
-    @WebMethod(operationName = "updateUser")
-    @WebResult(name = "userUpdated")
-    User updateUser(@WebParam(name = "user") User user);
+    @WebMethod(operationName = "update")
+    @WebResult(name = "updated")
+    UserDTO updateUser(@WebParam(name="userDTO") UserDTO user);
 
-    @WebMethod(operationName = "foundUser")
-    @WebResult(name = "userFounded")
-    User getUser(@WebParam(name = "dni") String dni);
+    @WebMethod(operationName = "getById")
+    @WebResult(name = "founded")
+    UserDTO getUser(@WebParam(name = "dni") String dni);
 }
