@@ -17,3 +17,4 @@
 ##### [IMPORTANT] For testing, it is necessary to have SOAP UI or any testing program installed, which supports XML request and response.
 * Get a WDSL Service: http://localhost:8080/user?wsdl
 ### 2) Test in SOAP UI
+[2024-01-04-23-43-48.webm](https://github.com/AlexLopezz/java.bootcamp.aws-software/assets/90531107/f2868dfe-ca57-43c7-93d5-9e94b7634dce)
