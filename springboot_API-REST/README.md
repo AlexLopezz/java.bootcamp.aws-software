@@ -34,6 +34,7 @@
 ### Demo (Postman)
 [Screencast from 05-01-24 22:39:26.webm](https://github.com/AlexLopezz/java.bootcamp.aws-software/assets/90531107/224fee29-176d-4402-a8dc-db7362c63ebf)
 
+### via Swagger: http://localhost:8080/swagger
 
 ### via CURL
 * [GET] ``` curl --location 'http://localhost:8080/user' ```
@@ -58,3 +59,5 @@
   }' ```
 * [GET] ```curl --location 'http://localhost:8080/user/{dni}' ```
 * [DELETE] ``` curl --location --request DELETE 'http://localhost:8080/user/{dni}' ```
+
+
