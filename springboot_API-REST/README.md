@@ -19,3 +19,41 @@
 ### Run project on IntelliJ 
 * Terminal:
   * Open a new terminal and exec this command: ``` mvn clean spring-boot:run ```
+
+### Body for test
+` {
+"dni": "string of numbers",
+"name": "your_name",
+"lastName": "your_lastname",
+"dateBirth": "yyyy-MM-dd",
+"profession": "any existing profession"
+} `
+* In field *'profession'* you must put any of these values: ["Backend Developer", "Frontend Developer", "Fullstack Developer", "QA Developer""]
+
+
+### Demo (Postman)
+
+
+### via CURL
+* [GET] ``` curl --location 'http://localhost:8080/user' ```
+* [POST] ``` curl --location 'http://localhost:8080/user' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "dni": "string of numbers",
+  "name": "your_name",
+  "lastName": "your_lastname",
+  "dateBirth": "yyyy-MM-dd",
+  "profession": "any existing profession"
+  }'   ```
+
+* [PUT] ``` curl --location --request PUT 'http://localhost:8080/user' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "dni": "string of numbers",
+  "name": "your_name",
+  "lastName": "your_lastname",
+  "dateBirth": "yyyy-MM-dd",
+  "profession": "any existing profession"
+  }' ```
+* [GET] ```curl --location 'http://localhost:8080/user/{dni}' ```
+* [DELETE] ``` curl --location --request DELETE 'http://localhost:8080/user/{dni}' ```

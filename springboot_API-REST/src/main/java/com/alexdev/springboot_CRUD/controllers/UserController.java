@@ -30,7 +30,7 @@ public class UserController {
     }
     @PostMapping
     public ResponseEntity<?> postUser(@RequestBody UserDTO user){
-        return ResponseEntity.ok(userService.save(user));
+        return ResponseEntity.status(201).body(userService.save(user));
     }
     @PutMapping
     public ResponseEntity<?> putUser(@RequestBody UserDTO user){
