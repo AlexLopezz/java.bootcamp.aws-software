@@ -1,7 +1,9 @@
 package com.alexdev.springboot_CRUD.services.impl;
 
-import com.alexdev.springboot_CRUD.mapper.IUserMapper;
-import com.alexdev.springboot_CRUD.models.dto.UserDTO;
+import com.alexdev.springboot_CRUD.mapper.impl.UserMapper;
+import com.alexdev.springboot_CRUD.models.User;
+import com.alexdev.springboot_CRUD.models.dto.UserRequest;
+import com.alexdev.springboot_CRUD.models.dto.UserResponse;
 import com.alexdev.springboot_CRUD.repositories.IUserRepository;
 import com.alexdev.springboot_CRUD.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,33 +14,41 @@ import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
+
+    private final IUserRepository repository;
+    private final UserMapper userMapper;
+
     @Autowired
-    IUserRepository userRepository;
-    @Autowired
-    IUserMapper mapper;
-
-    @Override
-    public List<UserDTO> getAll() {
-        return userRepository.findAll()
-                .stream().map(mapper::toDTO).toList();
+    public UserService(IUserRepository repository, UserMapper userMapper) {
+        this.repository = repository;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public Optional<UserDTO> getBy(String DNI) {
-        return userRepository.findById(DNI)
-                .flatMap(u -> Optional.ofNullable(mapper.toDTO(u)));
+    public List<UserResponse> getAll() {
+        return repository.findAll().stream()
+                .map(userMapper::fromEntityToResponse).toList();
     }
 
     @Override
-    public UserDTO save(UserDTO u) {
-        return mapper
-                .toDTO(userRepository
-                        .save(mapper.toEntity(u))
-                );
+    public Optional<UserResponse> findBy(Long id) {
+        return repository.findById(id)
+                .map(userMapper::fromEntityToResponse);
     }
 
     @Override
-    public void deleteBy(String DNI) {
-        userRepository.deleteById(DNI);
+    public UserResponse save(UserRequest u) {
+        User usr = userMapper.fromReqToEntity(u);
+        return userMapper.fromEntityToResponse(repository.save(usr));
+    }
+
+    @Override
+    public void deleteBy(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return repository.findByUsername(username);
     }
 }

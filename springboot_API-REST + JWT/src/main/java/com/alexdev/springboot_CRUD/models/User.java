@@ -6,15 +6,19 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 
+
 @Entity
 @Table(name= "db_user")
 @Builder
 @ToString
-@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter @Setter
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String username;
 
     @NotEmpty(message = "Field must have a valid value")
