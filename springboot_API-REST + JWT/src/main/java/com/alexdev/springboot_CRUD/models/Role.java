@@ -1,12 +1,10 @@
 package com.alexdev.springboot_CRUD.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name= "db_role")
+@Entity
+@Table(name= "db_role")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,12 +15,4 @@ public class Role {
     private Long id;
 
     private String name;
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Role r)
-            return this.name.equals(r.getName());
-
-        return false;
-    }
 }

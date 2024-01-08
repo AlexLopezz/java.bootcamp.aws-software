@@ -11,5 +11,7 @@ public interface IProfessionService {
     Profession save(Profession p);
     List<Profession> getAll();
     Optional<Profession> findByName(String name);
-    void saveAll(Iterable<Profession> professions);
+    Optional<Profession> findById(Long id);
+    void deleteById(Long id);
+    boolean existProfession(Long id);
 }

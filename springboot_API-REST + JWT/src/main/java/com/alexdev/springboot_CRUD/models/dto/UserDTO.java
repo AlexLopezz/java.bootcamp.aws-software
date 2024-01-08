@@ -1,9 +1,7 @@
 package com.alexdev.springboot_CRUD.models.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import java.util.List;
 
 @Builder
 @ToString

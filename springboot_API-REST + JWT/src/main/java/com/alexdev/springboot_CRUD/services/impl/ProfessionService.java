@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProfessioonService implements IProfessionService {
+public class ProfessionService implements IProfessionService {
     @Autowired
     IProfessionRepository professionRepository;
 
@@ -21,11 +21,6 @@ public class ProfessioonService implements IProfessionService {
     }
 
     @Override
-    public void saveAll(Iterable<Profession> pr) {
-        professionRepository.saveAll(pr);
-    }
-
-    @Override
     public List<Profession> getAll() {
         return professionRepository.findAll();
     }
@@ -33,5 +28,20 @@ public class ProfessioonService implements IProfessionService {
     @Override
     public Optional<Profession> findByName(String name) {
         return professionRepository.findByName(name);
+    }
+
+    @Override
+    public Optional<Profession> findById(Long id) {
+        return professionRepository.findById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        professionRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existProfession(Long id) {
+        return this.findById(id).isPresent();
     }
 }
