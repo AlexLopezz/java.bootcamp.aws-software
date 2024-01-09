@@ -1,4 +1,4 @@
-package com.alexdev.springboot_CRUD.config;
+package com.alexdev.springboot_CRUD.utils;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

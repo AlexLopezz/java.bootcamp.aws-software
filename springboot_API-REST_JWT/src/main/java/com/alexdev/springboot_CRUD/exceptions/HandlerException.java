@@ -1,6 +1,6 @@
 package com.alexdev.springboot_CRUD.exceptions;
 
-import com.alexdev.springboot_CRUD.config.ErrorExceptionValue;
+import com.alexdev.springboot_CRUD.utils.ErrorExceptionValue;
 import com.alexdev.springboot_CRUD.models.dto.MessageErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

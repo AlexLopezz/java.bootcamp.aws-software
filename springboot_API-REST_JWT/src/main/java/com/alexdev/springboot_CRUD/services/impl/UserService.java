@@ -7,6 +7,7 @@ import com.alexdev.springboot_CRUD.models.dto.UserResponse;
 import com.alexdev.springboot_CRUD.repositories.IUserRepository;
 import com.alexdev.springboot_CRUD.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class UserService implements IUserService {
     private final UserMapper userMapper;
 
     @Autowired
-    public UserService(IUserRepository repository, UserMapper userMapper) {
+    public UserService(IUserRepository repository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.userMapper = userMapper;
     }
